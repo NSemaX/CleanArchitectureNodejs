@@ -823,23 +823,23 @@
       "CreateCustomerRequest": {
         "type": "object",
         "properties": {
-          "name": {
+          "Name": {
             "type": "string",
             "nullable": true
           },
-          "surname": {
+          "Surname": {
             "type": "string",
             "nullable": true
           },
-          "email": {
+          "Email": {
             "type": "string",
             "nullable": true
           },
-          "password": {
+          "Password": {
             "type": "string",
             "nullable": true
           },
-          "status": {
+          "Status": {
             "type": "integer",
             "format": "int32"
           }
@@ -849,19 +849,19 @@
       "CreateOrderDTO": {
         "type": "object",
         "properties": {
-          "customerId": {
+          "CustomerId": {
             "type": "integer",
             "format": "int32"
           },
-          "totalAmount": {
+          "TotalAmount": {
             "type": "integer",
             "format": "int32"
           },
-          "status": {
+          "Status": {
             "type": "integer",
             "format": "int32"
           },
-          "purchasedDate": {
+          "PurchasedDate": {
             "type": "string",
             "format": "date-time"
           }
@@ -871,15 +871,15 @@
       "CreateOrderDetailDTO": {
         "type": "object",
         "properties": {
-          "orderId": {
+          "OrderId": {
             "type": "integer",
             "format": "int32"
           },
-          "productId": {
+          "ProductId": {
             "type": "integer",
             "format": "int32"
           },
-          "count": {
+          "Count": {
             "type": "integer",
             "format": "int32"
           }
@@ -889,15 +889,15 @@
       "CreateOrderDetailRequest": {
         "type": "object",
         "properties": {
-          "orderId": {
+          "OrderId": {
             "type": "integer",
             "format": "int32"
           },
-          "productId": {
+          "ProductId": {
             "type": "integer",
             "format": "int32"
           },
-          "count": {
+          "Count": {
             "type": "integer",
             "format": "int32"
           }
@@ -907,10 +907,10 @@
       "CreateOrderRequest": {
         "type": "object",
         "properties": {
-          "order": {
+          "Order": {
             "$ref": "#/components/schemas/CreateOrderDTO"
           },
-          "orderDetails": {
+          "OrderDetails": {
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/CreateOrderDetailDTO"
@@ -923,11 +923,11 @@
       "CreateProductRequest": {
         "type": "object",
         "properties": {
-          "name": {
+          "Name": {
             "type": "string",
             "nullable": true
           },
-          "price": {
+          "Price": {
             "type": "number",
             "format": "double"
           }
@@ -937,35 +937,35 @@
       "GetCustomerResponse": {
         "type": "object",
         "properties": {
-          "id": {
+          "Id": {
             "type": "integer",
             "format": "int32"
           },
-          "name": {
+          "Name": {
             "type": "string",
             "nullable": true
           },
-          "surname": {
+          "Surname": {
             "type": "string",
             "nullable": true
           },
-          "email": {
+          "Email": {
             "type": "string",
             "nullable": true
           },
-          "password": {
+          "Password": {
             "type": "string",
             "nullable": true
           },
-          "status": {
+          "Status": {
             "type": "integer",
             "format": "int32"
           },
-          "createdAt": {
+          "CreatedAt": {
             "type": "string",
             "format": "date-time"
           },
-          "updatedAt": {
+          "UpdatedAt": {
             "type": "string",
             "format": "date-time"
           }
@@ -975,30 +975,30 @@
       "GetOrderDTO": {
         "type": "object",
         "properties": {
-          "id": {
+          "Id": {
             "type": "integer",
             "format": "int32"
           },
-          "customer": {
+          "Customer": {
             "$ref": "#/components/schemas/GetCustomerResponse"
           },
-          "totalAmount": {
+          "TotalAmount": {
             "type": "integer",
             "format": "int32"
           },
-          "status": {
+          "Status": {
             "type": "integer",
             "format": "int32"
           },
-          "purchasedDate": {
+          "PurchasedDate": {
             "type": "string",
             "format": "date-time"
           },
-          "createdAt": {
+          "CreatedAt": {
             "type": "string",
             "format": "date-time"
           },
-          "updatedAt": {
+          "UpdatedAt": {
             "type": "string",
             "format": "date-time"
           }
@@ -1008,26 +1008,26 @@
       "GetOrderDetailDTO": {
         "type": "object",
         "properties": {
-          "id": {
+          "Id": {
             "type": "integer",
             "format": "int32"
           },
-          "orderId": {
+          "OrderId": {
             "type": "integer",
             "format": "int32"
           },
-          "product": {
+          "Product": {
             "$ref": "#/components/schemas/GetProductResponse"
           },
-          "count": {
+          "Count": {
             "type": "integer",
             "format": "int32"
           },
-          "createdAt": {
+          "CreatedAt": {
             "type": "string",
             "format": "date-time"
           },
-          "updatedAt": {
+          "UpdatedAt": {
             "type": "string",
             "format": "date-time"
           }
@@ -1037,27 +1037,27 @@
       "GetOrderDetailResponse": {
         "type": "object",
         "properties": {
-          "id": {
+          "Id": {
             "type": "integer",
             "format": "int32"
           },
-          "orderId": {
+          "OrderId": {
             "type": "integer",
             "format": "int32"
           },
-          "productId": {
+          "ProductId": {
             "type": "integer",
             "format": "int32"
           },
-          "count": {
+          "Count": {
             "type": "integer",
             "format": "int32"
           },
-          "createdAt": {
+          "CreatedAt": {
             "type": "string",
             "format": "date-time"
           },
-          "updatedAt": {
+          "UpdatedAt": {
             "type": "string",
             "format": "date-time"
           }
@@ -1067,10 +1067,10 @@
       "GetOrderResponse": {
         "type": "object",
         "properties": {
-          "order": {
+          "Order": {
             "$ref": "#/components/schemas/GetOrderDTO"
           },
-          "orderDetails": {
+          "OrderDetails": {
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/GetOrderDetailDTO"
@@ -1083,23 +1083,23 @@
       "GetProductResponse": {
         "type": "object",
         "properties": {
-          "id": {
+          "Id": {
             "type": "integer",
             "format": "int32"
           },
-          "name": {
+          "Name": {
             "type": "string",
             "nullable": true
           },
-          "price": {
+          "Price": {
             "type": "number",
             "format": "double"
           },
-          "createdAt": {
+          "CreatedAt": {
             "type": "string",
             "format": "date-time"
           },
-          "updatedAt": {
+          "UpdatedAt": {
             "type": "string",
             "format": "date-time"
           }
@@ -1136,27 +1136,27 @@
       "UpdateCustomerRequest": {
         "type": "object",
         "properties": {
-          "id": {
+          "ID": {
             "type": "integer",
             "format": "int32"
           },
-          "name": {
+          "Name": {
             "type": "string",
             "nullable": true
           },
-          "surname": {
+          "Surname": {
             "type": "string",
             "nullable": true
           },
-          "email": {
+          "Email": {
             "type": "string",
             "nullable": true
           },
-          "password": {
+          "Password": {
             "type": "string",
             "nullable": true
           },
-          "status": {
+          "Status": {
             "type": "integer",
             "format": "int32"
           }
@@ -1166,19 +1166,19 @@
       "UpdateOrderDetailRequest": {
         "type": "object",
         "properties": {
-          "id": {
+          "ID": {
             "type": "integer",
             "format": "int32"
           },
-          "orderId": {
+          "OrderId": {
             "type": "integer",
             "format": "int32"
           },
-          "productId": {
+          "ProductId": {
             "type": "integer",
             "format": "int32"
           },
-          "count": {
+          "Count": {
             "type": "integer",
             "format": "int32"
           }
@@ -1188,23 +1188,23 @@
       "UpdateOrderRequest": {
         "type": "object",
         "properties": {
-          "id": {
+          "ID": {
             "type": "integer",
             "format": "int32"
           },
-          "customerId": {
+          "CustomerId": {
             "type": "integer",
             "format": "int32"
           },
-          "totalAmount": {
+          "TotalAmount": {
             "type": "integer",
             "format": "int32"
           },
-          "status": {
+          "Status": {
             "type": "integer",
             "format": "int32"
           },
-          "purchasedDate": {
+          "PurchasedDate": {
             "type": "string",
             "format": "date-time"
           }
@@ -1214,15 +1214,15 @@
       "UpdateProductRequest": {
         "type": "object",
         "properties": {
-          "id": {
+          "ID": {
             "type": "integer",
             "format": "int32"
           },
-          "name": {
+          "Name": {
             "type": "string",
             "nullable": true
           },
-          "price": {
+          "Price": {
             "type": "number",
             "format": "double"
           }
