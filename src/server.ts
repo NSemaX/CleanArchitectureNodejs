@@ -5,6 +5,7 @@ import "reflect-metadata";
 import { applicationRoutes } from './application/routes';
 import swaggerUi from "swagger-ui-express";
 import swaggerOutput from "./swagger.json";
+import { exceptionHandler } from './application/middlewares/errorHandling/errorHandlerMiddleware';
 
 const app: Express = express();
 const port = 3000;
@@ -31,6 +32,8 @@ app.use('/', applicationRoutes);
 
 
 app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerOutput));
+
+app.use(exceptionHandler);
 
 app.listen(port, ()=> {
 console.log(`[Server]: I am running at http://localhost:${port}`);

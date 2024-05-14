@@ -2,6 +2,8 @@ import { inject, injectable } from "inversify";
 import Customer, { CustomerRequest, CustomerResponse } from "../domain/models/customer";
 import { Types } from "../infrastructure/utility/DiTypes";
 import { ICustomerRepository } from "../infrastructure/repositories/customerRepository";
+import { APIError } from "../application/middlewares/errorHandling/BaseError";
+import { HttpStatusCode } from "../application/middlewares/errorHandling/HttpStatusCodeEnums";
 
 export interface ICustomerService {
 
@@ -20,17 +22,17 @@ export class CustomerService implements ICustomerService {
 
 
   getAllCustomers = async (): Promise<Array<CustomerResponse>> => {
-    try {
-      return this.CustomerRepository.getAll();
-    } catch {
-      throw new Error("Unable to get Customers");
-    }
+      const customers= this.CustomerRepository.getAll();   
+      return customers;
   };
+
 
   getCustomerById = async (Id: number): Promise<CustomerResponse> => {
     try {
       return this.CustomerRepository.getById(Id);
-    } catch {
+    } catch(ex) {
+      /*const error = ex as APIError;
+      throw new APIError("customer error","Unable to get Customer",HttpStatusCode.INTERNAL_SERVER, error.stack);*/
       throw new Error("Unable to get Customer");
     }
   };

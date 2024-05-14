@@ -2,6 +2,10 @@ import { Op } from 'sequelize'
 import { inject, injectable } from "inversify";
 import "reflect-metadata";
 import Customer, { CustomerRequest, CustomerResponse } from '../../domain/models/customer'
+import { HttpStatusCode } from '../../application/middlewares/errorHandling/HttpStatusCodeEnums';
+import { APIError } from '../../application/middlewares/errorHandling/BaseError';
+import { NotFoundException } from '../../application/middlewares/errorHandling/APIExceptions';
+import { errorMessages } from '../../application/middlewares/errorHandling/errorMessages';
 
 export interface ICustomerRepository {
     getAll: () => Promise<Array<CustomerResponse>>;
@@ -16,7 +20,12 @@ export interface ICustomerRepository {
 export class CustomerRepository implements ICustomerRepository {
 
     getAll = async (): Promise<Array<CustomerResponse>> => {
-        return Customer.findAll()
+        const items = Customer.findAll()
+        if (!items || (await items).length==0) {
+            //throw new APIError("customer error","empty customers",HttpStatusCode.NOT_FOUND);
+            throw new NotFoundException(errorMessages.NotFound);
+        }
+        return items
     }
 
     getById = async (id: number): Promise<CustomerResponse> => {

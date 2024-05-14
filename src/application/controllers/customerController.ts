@@ -8,7 +8,7 @@ import { CustomerRequest } from "../../domain/models/customer";
 
 
 export interface ICustomerController {
-  getAllCustomers: (req: Request, res: Response) => Promise<Response>;
+  getAllCustomers: (req: Request, res: Response, next:any) => {};
   getCustomerById: (req: Request, res: Response) => Promise<Response>;
   createCustomer: (req: Request, res: Response) => Promise<any>;
   updateCustomer: (req: Request, res: Response) => Promise<any>;
@@ -21,15 +21,12 @@ export class CustomerController implements ICustomerController {
   private CustomerService: ICustomerService;
 
 
-  public getAllCustomers = async (req: Request, res: Response): Promise<Response> => {
+  public getAllCustomers = async (req: Request, res: Response, next:any) => {
     try {
       const allCustomers = await this.CustomerService.getAllCustomers();
       return res.status(StatusCode.SUCCESS).send(allCustomers);
     } catch (ex) {
-      res.status(StatusCode.SERVER_ERROR).send({
-        message: (ex as Error).message
-      });
-      throw new Error((ex as Error).message);
+      next(ex); // <---- propagate error to the middleware
     }
   };
 
