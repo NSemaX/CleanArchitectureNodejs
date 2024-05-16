@@ -17,7 +17,7 @@ class BaseError extends Error {
       Error.captureStackTrace(this);
     }
    }
-   //free to extend the CustomError
+   //extend the BaseError
    export class APIError extends BaseError {
     constructor(name: string, message = 'internal server error', httpCode = HttpStatusCode.INTERNAL_SERVER_ERROR, stack= 'internal server error', isOperational = true, ) {
       super(name, message, httpCode, stack ,isOperational);

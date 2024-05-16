@@ -1,9 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 import { APIError } from './BaseError';
 import { errorMessages } from './errorMessages';
-import { stack } from 'sequelize/types/utils';
-
-
 
 export const exceptionHandler = (
   error: APIError,
