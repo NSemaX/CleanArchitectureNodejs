@@ -1,4 +1,3 @@
-import createError from 'http-errors';
 import { errorMessages } from './errorMessages';
 import { HttpStatusCode } from './HttpStatusCodeEnums';
 import { APIError } from './BaseError';
