@@ -2,10 +2,12 @@ import { Op } from 'sequelize'
 import { inject, injectable } from "inversify";
 import "reflect-metadata";
 import Order, { OrderInput, OrderOutput } from '../../domain/aggregates/orderAggregate/order'
+import { Customer } from '../../domain/models';
 
 export interface IOrderRepository {
     getAll: () => Promise<Array<OrderOutput>>;
     getById: (id: number) => Promise<OrderOutput>;
+    getByCustomerId: (id: number) => Promise<Array<OrderOutput>>;
     create: (order: OrderInput) => Promise<any>;
     update: (id: number, order: Partial<OrderInput>) => Promise<number>;
     delete: (id: any) => Promise<boolean>;
@@ -19,6 +21,7 @@ export class OrderRepository implements IOrderRepository {
         return Order.findAll()
     }
 
+
     getById = async (id: number): Promise<OrderOutput> => {
         const item = await Order.findByPk(id)
 
@@ -28,6 +31,23 @@ export class OrderRepository implements IOrderRepository {
 
         return item
     }
+
+
+    getByCustomerId = async (id: number): Promise<Array<OrderOutput>> => {
+
+          const customerOrders = await Order.findAll({
+            where: {
+              CustomerId: id,
+            },
+          });
+
+        if (!customerOrders) {
+            throw new Error('not found')
+        }
+
+        return customerOrders
+    }
+
 
     create = async (payload: OrderInput): Promise<any> => {
         const item = await Order.create(payload)
