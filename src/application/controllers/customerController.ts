@@ -3,7 +3,7 @@ import { inject, injectable } from "inversify";
 import { StatusCode } from "../../infrastructure/utility/statusCodes";
 import { Types } from "../../infrastructure/utility/DiTypes";
 import { ICustomerService } from "../../domain.services/customerService";
-import { CustomerRequest } from "../../domain/models/customer";
+import { CustomerInput } from "../../domain/models/customer";
 
 
 
@@ -48,7 +48,7 @@ export class CustomerController implements ICustomerController {
   public createCustomer = async (req: Request, res: Response) => {
     try {
       const { Name,Surname,Email,Password,Status } = req.body;
-      const customer: CustomerRequest = {Name,Surname,Email,Password,Status}; 
+      const customer: CustomerInput = {Name,Surname,Email,Password,Status}; 
       const Customer = await this.CustomerService.createCustomer(customer);
       res.status(StatusCode.SUCCESS).send();
     } catch (ex) {
@@ -62,7 +62,7 @@ export class CustomerController implements ICustomerController {
   public updateCustomer = async (req: Request, res: Response) => {
     try {
       const { Name,Surname,Email,Password,Status } = req.body;
-      const customer: CustomerRequest = {Name, Surname, Email, Password, Status}; 
+      const customer: CustomerInput = {Name, Surname, Email, Password, Status}; 
       const id= customer.ID!;
       const updatedCustomerCount = await this.CustomerService.updateCustomer(id, customer);
       res.status(StatusCode.SUCCESS).send();

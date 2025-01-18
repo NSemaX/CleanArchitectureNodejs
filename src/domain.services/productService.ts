@@ -1,14 +1,14 @@
 import { inject, injectable } from "inversify";
-import Product, { ProductRequest, ProductResponse } from "../domain/models/product";
+import Product, { ProductInput, ProductOutput } from "../domain/models/product";
 import { Types } from "../infrastructure/utility/DiTypes";
 import { IProductRepository } from "../infrastructure/repositories/productRepository";
 
 export interface IProductService {
 
-  getProductById: (Id: number) => Promise<ProductResponse>;
-  getAllProducts: () => Promise<Array<ProductResponse>>;
-  createProduct: (Product: ProductRequest) => Promise<any>;
-  updateProduct: (Id: number, Product: ProductRequest) => Promise<number>;
+  getProductById: (Id: number) => Promise<ProductOutput>;
+  getAllProducts: () => Promise<Array<ProductOutput>>;
+  createProduct: (Product: ProductInput) => Promise<any>;
+  updateProduct: (Id: number, Product: ProductInput) => Promise<number>;
   deleteProduct: (Id: number) => Promise<boolean>;
 }
 
@@ -19,7 +19,7 @@ export class ProductService implements IProductService {
 
 
 
-  getAllProducts = async (): Promise<Array<ProductResponse>> => {
+  getAllProducts = async (): Promise<Array<ProductOutput>> => {
     try {
       return this.ProductRepository.getAll();
     } catch {
@@ -27,7 +27,7 @@ export class ProductService implements IProductService {
     }
   };
 
-  getProductById = async (Id: number): Promise<ProductResponse> => {
+  getProductById = async (Id: number): Promise<ProductOutput> => {
     try {
       return this.ProductRepository.getById(Id);
     } catch {
@@ -35,7 +35,7 @@ export class ProductService implements IProductService {
     }
   };
 
-  createProduct = async (Product: ProductRequest): Promise<any> => {
+  createProduct = async (Product: ProductInput): Promise<any> => {
     try {
       return this.ProductRepository.create(Product);
     } catch (ex) {
@@ -43,7 +43,7 @@ export class ProductService implements IProductService {
     }
   };
 
-  updateProduct = async (Id: number, Product: ProductRequest): Promise<number> => {
+  updateProduct = async (Id: number, Product: ProductInput): Promise<number> => {
     try {
       return this.ProductRepository.update(Id, Product);
     } catch {

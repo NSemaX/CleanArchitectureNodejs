@@ -9,10 +9,10 @@ export interface ICustomer {
     Status: number;
 }
 
-export interface CustomerRequest extends Optional<ICustomer, 'ID'> {}
-export interface CustomerResponse extends Required<ICustomer> {}
+export interface CustomerInput extends Optional<ICustomer, 'ID'> {}
+export interface CustomerOutput extends Required<ICustomer> {}
 
-class Customer extends Model<ICustomer,CustomerRequest> implements ICustomer {
+class Customer extends Model<ICustomer,CustomerInput> implements ICustomer {
     public ID!: number
     public Name!: string
     public Surname!: string

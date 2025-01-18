@@ -1,17 +1,17 @@
 import { Op } from 'sequelize'
 import { inject, injectable } from "inversify";
 import "reflect-metadata";
-import Customer, { CustomerRequest, CustomerResponse } from '../../domain/models/customer'
+import Customer, { CustomerInput, CustomerOutput } from '../../domain/models/customer'
 import { HttpStatusCode } from '../../application/middlewares/errorHandling/HttpStatusCodeEnums';
 import { APIError } from '../../application/middlewares/errorHandling/BaseError';
 import { NotFoundException } from '../../application/middlewares/errorHandling/APIExceptions';
 import { errorMessages } from '../../application/middlewares/errorHandling/errorMessages';
 
 export interface ICustomerRepository {
-    getAll: () => Promise<Array<CustomerResponse>>;
-    getById: (id: number) => Promise<CustomerResponse>;
-    create: (Customer: CustomerRequest) => Promise<any>;
-    update: (id: number, Customer: Partial<CustomerRequest>) => Promise<number>;
+    getAll: () => Promise<Array<CustomerOutput>>;
+    getById: (id: number) => Promise<CustomerOutput>;
+    create: (Customer: CustomerInput) => Promise<any>;
+    update: (id: number, Customer: Partial<CustomerInput>) => Promise<number>;
     delete: (id: any) => Promise<boolean>;
 }
 
@@ -19,7 +19,7 @@ export interface ICustomerRepository {
 @injectable()
 export class CustomerRepository implements ICustomerRepository {
 
-    getAll = async (): Promise<Array<CustomerResponse>> => {
+    getAll = async (): Promise<Array<CustomerOutput>> => {
         const items = Customer.findAll()
         if (!items || (await items).length==0) {
             //throw new APIError("customer error","empty customers",HttpStatusCode.NOT_FOUND);
@@ -28,7 +28,7 @@ export class CustomerRepository implements ICustomerRepository {
         return items
     }
 
-    getById = async (id: number): Promise<CustomerResponse> => {
+    getById = async (id: number): Promise<CustomerOutput> => {
         const item = await Customer.findByPk(id)
 
         if (!item) {
@@ -38,13 +38,13 @@ export class CustomerRepository implements ICustomerRepository {
         return item
     }
 
-    create = async (payload: CustomerRequest): Promise<any> => {
+    create = async (payload: CustomerInput): Promise<any> => {
         const item = await Customer.create(payload)
         return item.ID
     }
 
 
-    update = async (ID: number, payload: Partial<CustomerRequest>): Promise<number> => {
+    update = async (ID: number, payload: Partial<CustomerInput>): Promise<number> => {
         const item = await Customer.findByPk(ID)
 
         if (!item) {

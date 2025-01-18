@@ -1,54 +1,48 @@
 import { Model, Sequelize, DataTypes, Optional } from "sequelize";
 
-
-export interface IOrder {
+export interface IOrderDetail {
     ID: number;
-    CustomerId: number;
-    TotalAmount: number;
-    Status: number;
-    PurchasedDate: Date;
+    OrderId: number;
+    ProductId: number;
+    Count: number;
 }
 
+export interface OrderDetailInput extends Optional<IOrderDetail, 'ID'> {}
+export interface OrderDetailOutput extends Required<IOrderDetail> {}
 
-export interface OrderRequest extends Optional<IOrder, 'ID'> {}
-export interface OrderResponse extends Required<IOrder> {}
-
-class Order extends Model<IOrder,OrderRequest> implements IOrder {
+class OrderDetail extends Model<IOrderDetail,OrderDetailInput> implements IOrderDetail {
     public ID!: number
-    public CustomerId!: number
-    public TotalAmount!: number
-    public Status!: number
-    public PurchasedDate!: Date;
-
+    public OrderId!: number
+    public ProductId!: number
+    public Count!: number
 
     static initModel(sequelize: Sequelize): void {
-        Order.init(
+        OrderDetail.init(
             {
                 ID: {
                     type: DataTypes.INTEGER.UNSIGNED,
                     autoIncrement: true,
                     primaryKey: true,
                 },
-                CustomerId: {
+                OrderId: {
                     type: DataTypes.INTEGER,
                     allowNull: false
                 },
-                TotalAmount: {
+                ProductId: {
                     type: DataTypes.INTEGER,
                     allowNull: false
                 },
-                Status: {
+                Count: {
                     type: DataTypes.INTEGER
-                },
-                PurchasedDate:  DataTypes.DATE
+                }
             },
             {
                 sequelize,
                 timestamps: true,
-                tableName: "Orders"
+                tableName: "OrderDetails"
             }
         );
     }
 }
 
-export default Order
+export default OrderDetail

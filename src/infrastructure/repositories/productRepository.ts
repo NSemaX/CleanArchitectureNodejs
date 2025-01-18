@@ -1,13 +1,13 @@
 import { Op } from 'sequelize'
 import { inject, injectable } from "inversify";
 import "reflect-metadata";
-import Product, { ProductRequest, ProductResponse } from '../../domain/models/product'
+import Product, { ProductInput, ProductOutput } from '../../domain/models/product'
 
 export interface IProductRepository {
-    getAll: () => Promise<Array<ProductResponse>>;
-    getById: (id: number) => Promise<ProductResponse>;
-    create: (Product: ProductRequest) => Promise<any>;
-    update: (id: number, Product: Partial<ProductRequest>) => Promise<number>;
+    getAll: () => Promise<Array<ProductOutput>>;
+    getById: (id: number) => Promise<ProductOutput>;
+    create: (Product: ProductInput) => Promise<any>;
+    update: (id: number, Product: Partial<ProductInput>) => Promise<number>;
     delete: (id: any) => Promise<boolean>;
 }
 
@@ -15,11 +15,11 @@ export interface IProductRepository {
 @injectable()
 export class ProductRepository implements IProductRepository {
 
-    getAll = async (): Promise<Array<ProductResponse>> => {
+    getAll = async (): Promise<Array<ProductOutput>> => {
         return Product.findAll()
     }
 
-    getById = async (id: number): Promise<ProductResponse> => {
+    getById = async (id: number): Promise<ProductOutput> => {
         const item = await Product.findByPk(id)
 
         if (!item) {
@@ -29,13 +29,13 @@ export class ProductRepository implements IProductRepository {
         return item
     }
 
-    create = async (payload: ProductRequest): Promise<any> => {
+    create = async (payload: ProductInput): Promise<any> => {
         const item = await Product.create(payload)
         return item.ID
     }
 
 
-    update = async (ID: number, payload: Partial<ProductRequest>): Promise<number> => {
+    update = async (ID: number, payload: Partial<ProductInput>): Promise<number> => {
         const item = await Product.findByPk(ID)
 
         if (!item) {

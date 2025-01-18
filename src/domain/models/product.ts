@@ -6,10 +6,10 @@ export interface IProduct {
     Price: number;
 }
 
-export interface ProductRequest extends Optional<IProduct, 'ID'> {}
-export interface ProductResponse extends Required<IProduct> { } //CreatedAt: Date, UpdatedAt: Date
+export interface ProductInput extends Optional<IProduct, 'ID'> {}
+export interface ProductOutput extends Required<IProduct> { } //CreatedAt: Date, UpdatedAt: Date
 
-class Product extends Model<IProduct,ProductRequest> implements IProduct {
+class Product extends Model<IProduct,ProductInput> implements IProduct {
     public ID!: number
     public Name!: string
     public Price!: number

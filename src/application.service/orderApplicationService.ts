@@ -1,23 +1,29 @@
 import { inject, injectable } from "inversify";
-import Order, { OrderRequest, OrderResponse } from "../domain/models/order";
+import Order, { OrderInput, OrderOutput } from "../domain/aggregates/orderAggregate/order";
 import { Types } from "../infrastructure/utility/DiTypes";
 import { IOrderRepository } from "../infrastructure/repositories/orderRepository";
 import orderAggregateResponse, { OrderDTO, OrderDetailDTO } from "../application/dtos/orderAggregateResponse";
-import { OrderDetailResponse } from "../domain/models/orderDetail";
+import { OrderDetailOutput } from "../domain/aggregates/orderAggregate/orderDetail";
 import { IOrderDetailRepository } from "../infrastructure/repositories/orderDetailRepository";
 import { IProductRepository } from "../infrastructure/repositories/productRepository";
 import { ICustomerRepository } from "../infrastructure/repositories/customerRepository";
-import OrderAggregate from "../domain/aggregates/orderAggregate";
 import orderAggregateRequest from "../application/dtos/orderAggregateRequest";
+import { IOrderDomainService } from "../domain.services/orderDomainService";
+import { OrderAggregateInput } from "../domain/aggregates/orderAggregate/orderAggregate";
 
-export interface IOrderAggregateService {
-
-  getOrderAggreateById: (Id: number) => Promise<orderAggregateResponse>;
-  createOrderAggreate: (orderAggregateRequest: orderAggregateRequest) => Promise<any>;
+export interface IOrderApplicationService {
+  getAllOrders: () => Promise<Array<OrderOutput>>;
+  getOrderById: (Id: number) => Promise<orderAggregateResponse>;
+  createOrder: (orderAggregateRequest: orderAggregateRequest) => Promise<any>;
+  updateOrder: (Id: number, order: OrderInput) => Promise<number>;
+  deleteOrder: (Id: number) => Promise<boolean>;
 }
 
 @injectable()
-export class OrderAggregateService implements IOrderAggregateService {
+export class OrderApplicationService implements IOrderApplicationService {
+
+  @inject(Types.ORDER_DOMAIN_SERVICE)
+  private orderDomainService: IOrderDomainService;
 
   @inject(Types.ORDER_REPOSITORY)
   private orderRepository: IOrderRepository;
@@ -31,11 +37,22 @@ export class OrderAggregateService implements IOrderAggregateService {
   @inject(Types.CUSTOMER_REPOSITORY)
   private CustomerRepository: ICustomerRepository;
 
-  getOrderAggreateById = async (Id: number): Promise<orderAggregateResponse> => {
+  getAllOrders = async (): Promise<Array<OrderOutput>> => {
+    try {
+      return this.orderRepository.getAll();
+    } catch {
+      throw new Error("Unable to get orders");
+    }
+  };
+
+
+  getOrderById = async (Id: number): Promise<orderAggregateResponse> => {
     try {
       const orderAggregateResponseItem = new orderAggregateResponse();
-      let orderItem = await this.orderRepository.getById(Id);
-      let orderDetails: OrderDetailResponse[] = await this.OrderDetailRepository.getByOrderId(orderItem.ID);
+
+      const orderAggregateOutputItem = await this.orderDomainService.getOrderById(Id);
+      let orderItem = orderAggregateOutputItem.Order;
+      let orderDetails: OrderDetailOutput[] = orderAggregateOutputItem.OrderDetails;
       orderAggregateResponseItem.OrderDetails = [];
 
 
@@ -50,7 +67,6 @@ export class OrderAggregateService implements IOrderAggregateService {
       let OrderDetailDTOItems: Array<OrderDetailDTO> = new Array<OrderDetailDTO>();
 
       if (Array.isArray(orderDetails))
-       // orderDetails.forEach(async (orderDetailItem: any) => {
         for (const orderDetailItem of orderDetails) {
           const OrderDetailDTOItem = new OrderDetailDTO();
 
@@ -61,7 +77,6 @@ export class OrderAggregateService implements IOrderAggregateService {
 
           OrderDetailDTOItems.push(OrderDetailDTOItem);
         }
-        //});
 
       orderAggregateResponseItem.Order = OrderDTOItem;
       orderAggregateResponseItem.OrderDetails = OrderDetailDTOItems;
@@ -72,16 +87,17 @@ export class OrderAggregateService implements IOrderAggregateService {
     }
   };
 
-  createOrderAggreate = async (orderAggregateRequest: orderAggregateRequest): Promise<any> => {
+  createOrder = async (orderAggregateRequest: orderAggregateRequest): Promise<any> => {
     try {
-      const OrderAggregateItem = new OrderAggregate();
-      let OrderAggregateItemID = await this.orderRepository.create(orderAggregateRequest.Order);
+      const OrderAggregateInputItem = new OrderAggregateInput();
 
-      if (OrderAggregateItemID > 0)
-        orderAggregateRequest.OrderDetails.forEach(async (orderDetailItem: any) => {
-          orderDetailItem.OrderId = OrderAggregateItemID;
-          await this.OrderDetailRepository.create(orderDetailItem);
+          OrderAggregateInputItem.Order=orderAggregateRequest.Order;
+
+          orderAggregateRequest.OrderDetails.forEach(async (orderDetailItem: any) => {
+          OrderAggregateInputItem.OrderDetails.push(orderDetailItem);
         });
+
+      let OrderAggregateItemID = await this.orderDomainService.createOrder(OrderAggregateInputItem);
 
       return OrderAggregateItemID;
     } catch (ex) {
@@ -89,7 +105,21 @@ export class OrderAggregateService implements IOrderAggregateService {
     }
   };
 
+  updateOrder = async (Id: number, order: OrderInput): Promise<number> => {
+    try {
+      return this.orderRepository.update(Id, order);
+    } catch {
+      throw new Error("Unable to updated order");
+    }
+  };
 
+  deleteOrder = async (Id: number,): Promise<boolean> => {
+    try {
+      return this.orderRepository.delete(Id);
+    } catch {
+      throw new Error("Unable to delete order");
+    }
+  };
 
 }
 

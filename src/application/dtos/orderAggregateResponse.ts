@@ -1,5 +1,5 @@
-import { CustomerResponse } from "../../domain/models/customer";
-import  { ProductResponse } from "../../domain/models/product";
+import { CustomerOutput } from "../../domain/models/customer";
+import  { ProductOutput } from "../../domain/models/product";
 
 export class orderAggregateResponse {
     Order: OrderDTO;
@@ -8,7 +8,7 @@ export class orderAggregateResponse {
 
   export class OrderDTO {
     ID: number;
-    Customer: CustomerResponse;
+    Customer: CustomerOutput;
     TotalAmount: number;
     Status: number;
     PurchasedDate: Date;
@@ -19,7 +19,7 @@ export class orderAggregateResponse {
   export class OrderDetailDTO {
     ID: number;
     OrderId: number;
-    Product: ProductResponse;
+    Product: ProductOutput;
     Count: number;
     CreatedDate: Date;
     UpdatedDate: Date;

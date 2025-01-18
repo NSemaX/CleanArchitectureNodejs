@@ -4,7 +4,7 @@ import { StatusCode } from "../../infrastructure/utility/statusCodes";
 
 import { Types } from "../../infrastructure/utility/DiTypes";
 import { IProductService } from "../../domain.services/productService";
-import { ProductRequest } from "../../domain/models/product";
+import { ProductInput } from "../../domain/models/product";
 
 
 export interface IProductController {
@@ -50,7 +50,7 @@ export class ProductController implements IProductController {
   public createProduct = async (req: Request, res: Response) => {
     try {
       const { Name, Price } = req.body;
-      const product: ProductRequest = {Name,Price}; 
+      const product: ProductInput = {Name,Price}; 
       const Product = await this.ProductService.createProduct(product);
       res.status(StatusCode.SUCCESS).send();
     } catch (ex) {
@@ -63,7 +63,7 @@ export class ProductController implements IProductController {
   public updateProduct = async (req: Request, res: Response) => {
     try {
       const { ID, Name, Price } = req.body;
-      const product: ProductRequest = {ID, Name,Price}; 
+      const product: ProductInput = {ID, Name,Price}; 
       const id=product.ID!;
       const updatedProductCount = await this.ProductService.updateProduct(id, product);
       res.status(StatusCode.SUCCESS).send();

@@ -1,14 +1,14 @@
 import { Op } from 'sequelize'
 import { inject, injectable } from "inversify";
 import "reflect-metadata";
-import OrderDetail, { OrderDetailRequest, OrderDetailResponse } from '../../domain/models/orderDetail'
+import OrderDetail, { OrderDetailInput, OrderDetailOutput } from '../../domain/aggregates/orderAggregate/orderDetail'
 
 export interface IOrderDetailRepository {
-    getAll: () => Promise<Array<OrderDetailResponse>>;
-    getById: (id: number) => Promise<OrderDetailResponse>;
-    getByOrderId: (id: number) => Promise<Array<OrderDetailResponse>>;
-    create: (OrderDetail: OrderDetailRequest) => Promise<any>;
-    update: (id: number, OrderDetail: Partial<OrderDetailRequest>) => Promise<number>;
+    getAll: () => Promise<Array<OrderDetailOutput>>;
+    getById: (id: number) => Promise<OrderDetailOutput>;
+    getByOrderId: (id: number) => Promise<Array<OrderDetailOutput>>;
+    create: (OrderDetail: OrderDetailInput) => Promise<any>;
+    update: (id: number, OrderDetail: Partial<OrderDetailInput>) => Promise<number>;
     delete: (id: any) => Promise<boolean>;
 }
 
@@ -16,11 +16,11 @@ export interface IOrderDetailRepository {
 @injectable()
 export class OrderDetailRepository implements IOrderDetailRepository {
 
-    getAll = async (): Promise<Array<OrderDetailResponse>> => {
+    getAll = async (): Promise<Array<OrderDetailOutput>> => {
         return OrderDetail.findAll()
     }
 
-    getById = async (id: number): Promise<OrderDetailResponse> => {
+    getById = async (id: number): Promise<OrderDetailOutput> => {
         const item = await OrderDetail.findByPk(id)
 
         if (!item) {
@@ -30,7 +30,7 @@ export class OrderDetailRepository implements IOrderDetailRepository {
         return item
     }
 
-    getByOrderId = async (key: number): Promise<Array<OrderDetailResponse>> => {
+    getByOrderId = async (key: number): Promise<Array<OrderDetailOutput>> => {
         const items = await OrderDetail.findAll({
             where: {
                 OrderId: key,
@@ -44,13 +44,13 @@ export class OrderDetailRepository implements IOrderDetailRepository {
         return items
     }
 
-    create = async (payload: OrderDetailRequest): Promise<any> => {
+    create = async (payload: OrderDetailInput): Promise<any> => {
         const item = await OrderDetail.create(payload)
         return item.ID
     }
 
 
-    update = async (ID: number, payload: Partial<OrderDetailRequest>): Promise<number> => {
+    update = async (ID: number, payload: Partial<OrderDetailInput>): Promise<number> => {
         const item = await OrderDetail.findByPk(ID)
 
         if (!item) {

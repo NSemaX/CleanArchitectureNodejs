@@ -1,13 +1,13 @@
 import { Op } from 'sequelize'
 import { inject, injectable } from "inversify";
 import "reflect-metadata";
-import Order, { OrderRequest, OrderResponse } from '../../domain/models/order'
+import Order, { OrderInput, OrderOutput } from '../../domain/aggregates/orderAggregate/order'
 
 export interface IOrderRepository {
-    getAll: () => Promise<Array<OrderResponse>>;
-    getById: (id: number) => Promise<OrderResponse>;
-    create: (order: OrderRequest) => Promise<any>;
-    update: (id: number, order: Partial<OrderRequest>) => Promise<number>;
+    getAll: () => Promise<Array<OrderOutput>>;
+    getById: (id: number) => Promise<OrderOutput>;
+    create: (order: OrderInput) => Promise<any>;
+    update: (id: number, order: Partial<OrderInput>) => Promise<number>;
     delete: (id: any) => Promise<boolean>;
 }
 
@@ -15,11 +15,11 @@ export interface IOrderRepository {
 @injectable()
 export class OrderRepository implements IOrderRepository {
 
-    getAll = async (): Promise<Array<OrderResponse>> => {
+    getAll = async (): Promise<Array<OrderOutput>> => {
         return Order.findAll()
     }
 
-    getById = async (id: number): Promise<OrderResponse> => {
+    getById = async (id: number): Promise<OrderOutput> => {
         const item = await Order.findByPk(id)
 
         if (!item) {
@@ -29,13 +29,13 @@ export class OrderRepository implements IOrderRepository {
         return item
     }
 
-    create = async (payload: OrderRequest): Promise<any> => {
+    create = async (payload: OrderInput): Promise<any> => {
         const item = await Order.create(payload)
         return item.ID
     }
 
 
-    update = async (ID: number, payload: Partial<OrderRequest>): Promise<number> => {
+    update = async (ID: number, payload: Partial<OrderInput>): Promise<number> => {
         const item = await Order.findByPk(ID)
 
         if (!item) {

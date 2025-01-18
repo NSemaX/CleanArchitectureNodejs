@@ -1,5 +1,5 @@
 import { inject, injectable } from "inversify";
-import Customer, { CustomerRequest, CustomerResponse } from "../domain/models/customer";
+import Customer, { CustomerInput, CustomerOutput } from "../domain/models/customer";
 import { Types } from "../infrastructure/utility/DiTypes";
 import { ICustomerRepository } from "../infrastructure/repositories/customerRepository";
 import { APIError } from "../application/middlewares/errorHandling/BaseError";
@@ -7,10 +7,10 @@ import { HttpStatusCode } from "../application/middlewares/errorHandling/HttpSta
 
 export interface ICustomerService {
 
-  getCustomerById: (Id: number) => Promise<CustomerResponse>;
-  getAllCustomers: () => Promise<Array<CustomerResponse>>;
-  createCustomer: (Customer: CustomerRequest) => Promise<any>;
-  updateCustomer: (Id: number, Customer: CustomerRequest) => Promise<number>;
+  getCustomerById: (Id: number) => Promise<CustomerOutput>;
+  getAllCustomers: () => Promise<Array<CustomerOutput>>;
+  createCustomer: (Customer: CustomerInput) => Promise<any>;
+  updateCustomer: (Id: number, Customer: CustomerInput) => Promise<number>;
   deleteCustomer: (Id: number) => Promise<boolean>;
 }
 
@@ -21,13 +21,13 @@ export class CustomerService implements ICustomerService {
 
 
 
-  getAllCustomers = async (): Promise<Array<CustomerResponse>> => {
+  getAllCustomers = async (): Promise<Array<CustomerOutput>> => {
       const customers= this.CustomerRepository.getAll();   
       return customers;
   };
 
 
-  getCustomerById = async (Id: number): Promise<CustomerResponse> => {
+  getCustomerById = async (Id: number): Promise<CustomerOutput> => {
     try {
       return this.CustomerRepository.getById(Id);
     } catch(ex) {
@@ -37,7 +37,7 @@ export class CustomerService implements ICustomerService {
     }
   };
 
-  createCustomer = async (Customer: CustomerRequest): Promise<any> => {
+  createCustomer = async (Customer: CustomerInput): Promise<any> => {
     try {
       return this.CustomerRepository.create(Customer);
     } catch (ex) {
@@ -45,7 +45,7 @@ export class CustomerService implements ICustomerService {
     }
   };
 
-  updateCustomer = async (Id: number, Customer: CustomerRequest): Promise<number> => {
+  updateCustomer = async (Id: number, Customer: CustomerInput): Promise<number> => {
     try {
       return this.CustomerRepository.update(Id, Customer);
     } catch {
