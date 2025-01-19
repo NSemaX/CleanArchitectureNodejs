@@ -2,8 +2,8 @@ import { Request, Response } from "express";
 import { inject, injectable } from "inversify";
 import { StatusCode } from "../../infrastructure/utility/statusCodes";
 import { Types } from "../../infrastructure/utility/DiTypes";
-import { ICustomerService } from "../../domain.services/customerService";
 import { CustomerInput } from "../../domain/models/customer";
+import { ICustomerApplicationService } from "../../application.service/customerApplicationService";
 
 
 
@@ -17,13 +17,13 @@ export interface ICustomerController {
 
 @injectable()
 export class CustomerController implements ICustomerController {
-  @inject(Types.CUSTOMER_SERVICE)
-  private CustomerService: ICustomerService;
+  @inject(Types.CUSTOMER_APPLICATION_SERVICE)
+  private CustomerApplicationService: ICustomerApplicationService;
 
 
   public getAllCustomers = async (req: Request, res: Response, next:any) => {
     try {
-      const allCustomers = await this.CustomerService.getAllCustomers();
+      const allCustomers = await this.CustomerApplicationService.getAllCustomers();
       return res.status(StatusCode.SUCCESS).send(allCustomers);
     } catch (ex) {
       next(ex); // <---- propagate error to the middleware
@@ -34,7 +34,7 @@ export class CustomerController implements ICustomerController {
   public getCustomerById = async (req: Request, res: Response): Promise<Response> => {
     try {
       const id = Number(req.params.id)
-      const Customer = await this.CustomerService.getCustomerById(id);
+      const Customer = await this.CustomerApplicationService.getCustomerById(id);
       return res.status(StatusCode.SUCCESS).send(Customer);
     } catch (ex) {
       if((ex as Error).message=="not found")
@@ -49,7 +49,7 @@ export class CustomerController implements ICustomerController {
     try {
       const { Name,Surname,Email,Password,Status } = req.body;
       const customer: CustomerInput = {Name,Surname,Email,Password,Status}; 
-      const Customer = await this.CustomerService.createCustomer(customer);
+      const Customer = await this.CustomerApplicationService.createCustomer(customer);
       res.status(StatusCode.SUCCESS).send();
     } catch (ex) {
       res.status(StatusCode.SERVER_ERROR).send({
@@ -64,7 +64,7 @@ export class CustomerController implements ICustomerController {
       const { Name,Surname,Email,Password,Status } = req.body;
       const customer: CustomerInput = {Name, Surname, Email, Password, Status}; 
       const id= customer.ID!;
-      const updatedCustomerCount = await this.CustomerService.updateCustomer(id, customer);
+      const updatedCustomerCount = await this.CustomerApplicationService.updateCustomer(id, customer);
       res.status(StatusCode.SUCCESS).send();
     } catch (ex) {
       if((ex as Error).message=="not found")
@@ -78,7 +78,7 @@ export class CustomerController implements ICustomerController {
   public deleteCustomer = async (req: Request, res: Response) => {
     try {
       const id = Number(req.params.id)
-      const result = await this.CustomerService.deleteCustomer(id);
+      const result = await this.CustomerApplicationService.deleteCustomer(id);
       return res.status(StatusCode.SUCCESS).send();
     } catch (ex) {
       if((ex as Error).message=="not found")

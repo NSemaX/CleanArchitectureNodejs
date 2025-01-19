@@ -1,9 +1,8 @@
 import { Request, Response } from "express";
 import { inject, injectable } from "inversify";
 import { StatusCode } from "../../infrastructure/utility/statusCodes";
-
 import { Types } from "../../infrastructure/utility/DiTypes";
-import { IProductService } from "../../domain.services/productService";
+import { IProductApplicationService } from "../../application.service/productApplicationService";
 import { ProductInput } from "../../domain/models/product";
 
 
@@ -17,14 +16,14 @@ export interface IProductController {
 
 @injectable()
 export class ProductController implements IProductController {
-  @inject(Types.PRODUCT_SERVICE)
-  private ProductService: IProductService;
+  @inject(Types.PRODUCT_APPLICATION_SERVICE)
+  private ProductApplicationService: IProductApplicationService;
 
 
 
   public getAllProducts = async (req: Request, res: Response): Promise<Response> => {
     try {
-      const allProducts = await this.ProductService.getAllProducts();
+      const allProducts = await this.ProductApplicationService.getAllProducts();
       return res.status(StatusCode.SUCCESS).send(allProducts);
     } catch (ex) {
       res.status(StatusCode.SERVER_ERROR).send({
@@ -37,7 +36,7 @@ export class ProductController implements IProductController {
   public getProductById = async (req: Request, res: Response): Promise<Response> => {
     try {
       const id = Number(req.params.id)
-      const Product = await this.ProductService.getProductById(id);
+      const Product = await this.ProductApplicationService.getProductById(id);
       return res.status(StatusCode.SUCCESS).send(Product);
     } catch (ex) {
       if((ex as Error).message=="not found")
@@ -51,7 +50,7 @@ export class ProductController implements IProductController {
     try {
       const { Name, Price } = req.body;
       const product: ProductInput = {Name,Price}; 
-      const Product = await this.ProductService.createProduct(product);
+      const Product = await this.ProductApplicationService.createProduct(product);
       res.status(StatusCode.SUCCESS).send();
     } catch (ex) {
       res.status(StatusCode.SERVER_ERROR).send({
@@ -65,7 +64,7 @@ export class ProductController implements IProductController {
       const { ID, Name, Price } = req.body;
       const product: ProductInput = {ID, Name,Price}; 
       const id=product.ID!;
-      const updatedProductCount = await this.ProductService.updateProduct(id, product);
+      const updatedProductCount = await this.ProductApplicationService.updateProduct(id, product);
       res.status(StatusCode.SUCCESS).send();
     } catch (ex) {
       if((ex as Error).message=="not found")
@@ -78,7 +77,7 @@ export class ProductController implements IProductController {
   public deleteProduct = async (req: Request, res: Response) => {
     try {
       const id = Number(req.params.id)
-      const result = await this.ProductService.deleteProduct(id);
+      const result = await this.ProductApplicationService.deleteProduct(id);
       return res.status(StatusCode.SUCCESS).send();
     } catch (ex) {
       if((ex as Error).message=="not found")

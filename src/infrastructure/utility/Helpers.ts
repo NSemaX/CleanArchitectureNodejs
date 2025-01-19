@@ -12,6 +12,9 @@ class Helpers {
             }
           }
         }
+
+        console.log(duplicates);
+        
         let greater = 0;
         const maxProductCount = 5;
         duplicates.forEach((num) => { if (num > maxProductCount) greater++; });

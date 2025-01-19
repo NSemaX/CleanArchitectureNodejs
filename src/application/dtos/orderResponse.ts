@@ -1,12 +1,12 @@
 import { CustomerOutput } from "../../domain/models/customer";
 import  { ProductOutput } from "../../domain/models/product";
 
-export class orderAggregateResponse {
-    Order: OrderDTO;
-    OrderDetails:Array<OrderDetailDTO>;
+export class orderResponse {
+    Order: OrderResponseDTO;
+    OrderDetails:Array<OrderDetailResponseDTO>;
   }
 
-  export class OrderDTO {
+  export class OrderResponseDTO {
     ID: number;
     Customer: CustomerOutput;
     TotalAmount: number;
@@ -16,7 +16,7 @@ export class orderAggregateResponse {
     UpdatedDate: Date;
   }
 
-  export class OrderDetailDTO {
+  export class OrderDetailResponseDTO {
     ID: number;
     OrderId: number;
     Product: ProductOutput;
@@ -24,4 +24,4 @@ export class orderAggregateResponse {
     CreatedDate: Date;
     UpdatedDate: Date;
   }
-  export default orderAggregateResponse
+  export default orderResponse

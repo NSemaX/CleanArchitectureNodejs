@@ -2,7 +2,7 @@ import { Request, Response } from "express";
 import { inject, injectable } from "inversify";
 import { StatusCode } from "../../infrastructure/utility/statusCodes";
 import { Types } from "../../infrastructure/utility/DiTypes";
-import orderAggregateRequest from "../dtos/orderAggregateRequest";
+import orderAggregateRequest from "../dtos/orderRequest";
 import { IOrderApplicationService } from "../../application.service/orderApplicationService";
 import { OrderInput } from "../../domain/aggregates/orderAggregate/order";
 

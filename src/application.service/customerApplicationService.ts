@@ -4,30 +4,34 @@ import { Types } from "../infrastructure/utility/DiTypes";
 import { ICustomerRepository } from "../infrastructure/repositories/customerRepository";
 import { APIError } from "../application/middlewares/errorHandling/BaseError";
 import { HttpStatusCode } from "../application/middlewares/errorHandling/HttpStatusCodeEnums";
+import { ICustomerDomainService } from "../domain.services/customerDomainService";
+import { CustomerResponse } from "../application/dtos/customerResponse";
+import { CustomerRequest } from "../application/dtos/customerRequest";
 
-export interface ICustomerService {
+export interface ICustomerApplicationService {
 
-  getCustomerById: (Id: number) => Promise<CustomerOutput>;
-  getAllCustomers: () => Promise<Array<CustomerOutput>>;
-  createCustomer: (Customer: CustomerInput) => Promise<any>;
-  updateCustomer: (Id: number, Customer: CustomerInput) => Promise<number>;
+  getCustomerById: (Id: number) => Promise<CustomerResponse>;
+  getAllCustomers: () => Promise<Array<CustomerResponse>>;
+  createCustomer: (Customer: CustomerRequest) => Promise<any>;
+  updateCustomer: (Id: number, Customer: CustomerRequest) => Promise<number>;
   deleteCustomer: (Id: number) => Promise<boolean>;
 }
 
 @injectable()
-export class CustomerService implements ICustomerService {
+export class CustomerApplicationService implements ICustomerApplicationService {
   @inject(Types.CUSTOMER_REPOSITORY)
   private CustomerRepository: ICustomerRepository;
 
+  @inject(Types.CUSTOMER_DOMAIN_SERVICE)
+  private CustomerDomainService: ICustomerDomainService;
 
-
-  getAllCustomers = async (): Promise<Array<CustomerOutput>> => {
+  getAllCustomers = async (): Promise<Array<CustomerResponse>> => {
       const customers= this.CustomerRepository.getAll();   
       return customers;
   };
 
 
-  getCustomerById = async (Id: number): Promise<CustomerOutput> => {
+  getCustomerById = async (Id: number): Promise<CustomerResponse> => {
     try {
       return this.CustomerRepository.getById(Id);
     } catch(ex) {
@@ -37,15 +41,15 @@ export class CustomerService implements ICustomerService {
     }
   };
 
-  createCustomer = async (Customer: CustomerInput): Promise<any> => {
+  createCustomer = async (Customer: CustomerRequest): Promise<any> => {
     try { //check email duplicated?
-      return this.CustomerRepository.create(Customer);
+      return this.CustomerDomainService.createCustomer(Customer);
     } catch (ex) {
       throw new Error("Unable to create Customer");
     }
   };
 
-  updateCustomer = async (Id: number, Customer: CustomerInput): Promise<number> => {
+  updateCustomer = async (Id: number, Customer: CustomerRequest): Promise<number> => {
     try {
       return this.CustomerRepository.update(Id, Customer);
     } catch {
@@ -61,4 +65,3 @@ export class CustomerService implements ICustomerService {
     }
   };
 }
-
