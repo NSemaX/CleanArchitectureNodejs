@@ -38,7 +38,7 @@ export class CustomerService implements ICustomerService {
   };
 
   createCustomer = async (Customer: CustomerInput): Promise<any> => {
-    try {
+    try { //check email duplicated?
       return this.CustomerRepository.create(Customer);
     } catch (ex) {
       throw new Error("Unable to create Customer");

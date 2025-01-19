@@ -6,10 +6,6 @@ import Order, {
 import OrderDetail, {
   OrderDetailOutput,
 } from "../domain/aggregates/orderAggregate/orderDetail";
-import {
-  OrderAggregateInput,
-  OrderAggregateOutput,
-} from "../domain/aggregates/orderAggregate/orderAggregate";
 import { Types } from "../infrastructure/utility/DiTypes";
 import { IOrderRepository } from "../infrastructure/repositories/orderRepository";
 import { IOrderDetailRepository } from "../infrastructure/repositories/orderDetailRepository";
@@ -32,45 +28,27 @@ export class OrderDomainService implements IOrderDomainService {
 
   checkOrder = async (Id: number): Promise<boolean> => {
     try {
-      let orderItems : OrderOutput[] = await this.orderRepository.getByCustomerId(Id);
+      let result = false;
       const today = new Date();
-      const orderItemsFiltered = orderItems.filter((word) => today.toDateString() === word.PurchasedDate.toDateString());
-      let sameProductCount = 0;
+      let orderItems: OrderOutput[] =
+        await this.orderRepository.getByCustomerId(Id);
+      const orderItemsFiltered = orderItems.filter(
+        (item) => today.toDateString() === item.PurchasedDate.toDateString()
+      );
 
-      for (const orderDetailItem of orderItemsFiltered) { {
-
-        let orderDetails: OrderDetailOutput[] = await this.OrderDetailRepository.getByOrderId(orderDetailItem.ID);
-
-        let productElements = [];
+      for (const orderItem of orderItemsFiltered) {
+        let orderDetails: OrderDetailOutput[] =
+          await this.OrderDetailRepository.getByOrderId(orderItem.ID);
+        let customerProducts = [];
         if (Array.isArray(orderDetails))
           for (const orderDetailItem of orderDetails) {
             let product = await this.ProductRepository.getById(
               orderDetailItem.ProductId
             );
-            productElements.push(product.ID);
+            customerProducts.push(product.ID);
           }
-  
-       
-        if (Array.isArray(productElements))
-          for (const num in productElements) {
-            for (const num2 in productElements) {
-              if (num != num2) {
-                continue;
-              } else {
-                if (num === num2) {
-                  sameProductCount++;
-                }
-              }
-            }
-          }
-        
-        }
-    }
-
-      let result = false;
-
-      if (sameProductCount > 0) result = true;
-
+        result = Helpers.hasDuplicateElements(customerProducts);
+      }
       return result;
     } catch (ex) {
       throw new Error("Unable to create order");

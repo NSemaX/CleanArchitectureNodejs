@@ -8,12 +8,12 @@ import { IProductRepository } from "../infrastructure/repositories/productReposi
 import { ICustomerRepository } from "../infrastructure/repositories/customerRepository";
 import orderAggregateRequest from "../application/dtos/orderAggregateRequest";
 import { IOrderDomainService } from "../domain.services/orderDomainService";
-import { OrderAggregateInput } from "../domain/aggregates/orderAggregate/orderAggregate";
 import { IOrderDetailRepository } from "../infrastructure/repositories/orderDetailRepository";
 
 export interface IOrderApplicationService {
   getAllOrders: () => Promise<Array<OrderOutput>>;
   getOrderById: (Id: number) => Promise<orderAggregateResponse>;
+  getOrderByCustomerId: (Id: number) => Promise<Array<orderAggregateResponse>>;
   createOrder: (orderAggregateRequest: orderAggregateRequest) => Promise<any>;
   updateOrder: (Id: number, order: OrderInput) => Promise<number>;
   deleteOrder: (Id: number) => Promise<boolean>;
@@ -48,41 +48,26 @@ export class OrderApplicationService implements IOrderApplicationService {
 
   getOrderById = async (Id: number): Promise<orderAggregateResponse> => {
     try {
-      const orderAggregateResponseItem = new orderAggregateResponse();
       let orderItem = await this.orderRepository.getById(Id);
       let orderDetails: OrderDetailOutput[] = await this.OrderDetailRepository.getByOrderId(orderItem.ID);
-      orderAggregateResponseItem.OrderDetails = [];
-
-      let TotalAmount=0;
-      let OrderDTOItem = new OrderDTO();
-
-      OrderDTOItem.ID = orderItem.ID;
-      OrderDTOItem.Customer = await this.CustomerRepository.getById(orderItem.CustomerId);
-
-      OrderDTOItem.Status = orderItem.Status
-      OrderDTOItem.PurchasedDate = orderItem.PurchasedDate;
-
-      let OrderDetailDTOItems: Array<OrderDetailDTO> = new Array<OrderDetailDTO>();
-
-      if (Array.isArray(orderDetails))
-       // orderDetails.forEach(async (orderDetailItem: any) => {
-        for (const orderDetailItem of orderDetails) {
-          const OrderDetailDTOItem = new OrderDetailDTO();
-
-          OrderDetailDTOItem.ID = orderDetailItem.ID;
-          OrderDetailDTOItem.Product = await this.ProductRepository.getById(orderDetailItem.ProductId);
-          TotalAmount +=OrderDetailDTOItem.Product.Price * orderDetailItem.Count ;
-          OrderDetailDTOItem.Count = orderDetailItem.Count;
-          OrderDetailDTOItem.OrderId = orderDetailItem.OrderId;
-
-          OrderDetailDTOItems.push(OrderDetailDTOItem);
-        }
-        //});
-        OrderDTOItem.TotalAmount=TotalAmount;
-      orderAggregateResponseItem.Order = OrderDTOItem;
-      orderAggregateResponseItem.OrderDetails = OrderDetailDTOItems;
-
+      let orderAggregateResponseItem = await this.prepareOrderAggregate(orderItem,orderDetails);
       return orderAggregateResponseItem;
+    } catch {
+      throw new Error("Unable to get order");
+    }
+  };
+
+  getOrderByCustomerId = async (CustomerId: number): Promise<Array<orderAggregateResponse>> => {
+    try {
+      let orderAggregateResponseList : orderAggregateResponse[] = new Array<orderAggregateResponse>();
+      let orderItems : OrderOutput[] = await this.orderRepository.getByCustomerId(CustomerId);
+
+      for (const orderItem of orderItems) {
+        let orderDetails: OrderDetailOutput[] = await this.OrderDetailRepository.getByOrderId(orderItem.ID);
+        let orderAggregateResponseItem = await this.prepareOrderAggregate(orderItem,orderDetails);
+        orderAggregateResponseList.push(orderAggregateResponseItem);
+      }
+      return orderAggregateResponseList;
     } catch {
       throw new Error("Unable to get order");
     }
@@ -90,9 +75,9 @@ export class OrderApplicationService implements IOrderApplicationService {
 
   createOrder = async (orderAggregateRequest: orderAggregateRequest): Promise<any> => {
     try {
-      let reachedMaxProductInADayCount = await this.orderDomainService.checkOrder(orderAggregateRequest.Order.CustomerId);
+      let isReachedMaxProductInADay = await this.orderDomainService.checkOrder(orderAggregateRequest.Order.CustomerId);
       
-      if (reachedMaxProductInADayCount == false)
+      if (!isReachedMaxProductInADay)
       {
         let OrderAggregateItemID = await this.orderRepository.create(orderAggregateRequest.Order);
 
@@ -104,7 +89,7 @@ export class OrderApplicationService implements IOrderApplicationService {
           return OrderAggregateItemID;
       }
       
-      throw new Error("Unable to create order");
+      throw new Error("Unable to create order, reached to max product count in a day.");
     } catch (ex) {
       throw new Error("Unable to create order");
     }
@@ -125,6 +110,38 @@ export class OrderApplicationService implements IOrderApplicationService {
       throw new Error("Unable to delete order");
     }
   };
+
+   prepareOrderAggregate= async (order: OrderOutput, orderDetails: Array<OrderDetailOutput>): Promise<orderAggregateResponse> => {
+    const orderAggregateResponseItem = new orderAggregateResponse();
+    orderAggregateResponseItem.OrderDetails = [];
+
+    let TotalAmount=0;
+    let OrderDTOItem = new OrderDTO();
+
+    OrderDTOItem.ID = order.ID;
+    OrderDTOItem.Customer = await this.CustomerRepository.getById(order.CustomerId);
+    OrderDTOItem.Status = order.Status
+    OrderDTOItem.PurchasedDate = order.PurchasedDate;
+
+    let OrderDetailDTOItems: Array<OrderDetailDTO> = new Array<OrderDetailDTO>();
+
+    if (Array.isArray(orderDetails))
+      for (const orderDetailItem of orderDetails) {
+        const OrderDetailDTOItem = new OrderDetailDTO();
+        OrderDetailDTOItem.ID = orderDetailItem.ID;
+        OrderDetailDTOItem.Product = await this.ProductRepository.getById(orderDetailItem.ProductId);
+        TotalAmount += OrderDetailDTOItem.Product.Price * orderDetailItem.Count ;
+        OrderDetailDTOItem.Count = orderDetailItem.Count;
+        OrderDetailDTOItem.OrderId = orderDetailItem.OrderId;
+        OrderDetailDTOItems.push(OrderDetailDTOItem);
+      }
+
+    OrderDTOItem.TotalAmount=TotalAmount;
+    orderAggregateResponseItem.Order = OrderDTOItem;
+    orderAggregateResponseItem.OrderDetails = OrderDetailDTOItems;
+
+    return orderAggregateResponseItem;
+  }
 
 }
 

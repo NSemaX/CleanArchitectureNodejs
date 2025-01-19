@@ -32,7 +32,6 @@ export class OrderRepository implements IOrderRepository {
         return item
     }
 
-
     getByCustomerId = async (id: number): Promise<Array<OrderOutput>> => {
 
           const customerOrders = await Order.findAll({
