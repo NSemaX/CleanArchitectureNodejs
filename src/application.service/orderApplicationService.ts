@@ -1,5 +1,5 @@
 import { inject, injectable } from "inversify";
-import Order, { OrderInput, OrderOutput } from "../domain/aggregates/orderAggregate/order";
+import  { OrderInput, OrderOutput } from "../domain/aggregates/orderAggregate/order";
 import { Types } from "../infrastructure/utility/DiTypes";
 import { IOrderRepository } from "../infrastructure/repositories/orderRepository";
 import orderResponse, { OrderResponseDTO, OrderDetailResponseDTO } from "../application/dtos/orderResponse";
@@ -75,7 +75,7 @@ export class OrderApplicationService implements IOrderApplicationService {
 
   createOrder = async (orderRequest: orderRequest): Promise<any> => {
     try {
-      let isReachedMaxProductInADay = await this.orderDomainService.checkOrder(orderRequest.Order.CustomerId);
+      let isReachedMaxProductInADay = await this.orderDomainService.checkOrderisReachedtheMaxProductCountInADay(orderRequest.Order.CustomerId);
       
       if (!isReachedMaxProductInADay)
       {
@@ -87,8 +87,7 @@ export class OrderApplicationService implements IOrderApplicationService {
             await this.OrderDetailRepository.create(orderDetailItem);
           });
           return OrderAggregateItemID;
-      }
-      
+      }     
       throw new Error("Unable to create order, reached to max product count in a day.");
     } catch (ex) {
       throw new Error("Unable to create order");

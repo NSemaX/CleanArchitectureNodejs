@@ -12,7 +12,7 @@ import { IOrderDetailRepository } from "../infrastructure/repositories/orderDeta
 import { IProductRepository } from "../infrastructure/repositories/productRepository";
 
 export interface IOrderDomainService {
-  checkOrder: (Id: number) => Promise<boolean>;
+  checkOrderisReachedtheMaxProductCountInADay: (Id: number) => Promise<boolean>;
 }
 
 @injectable()
@@ -26,29 +26,33 @@ export class OrderDomainService implements IOrderDomainService {
   @inject(Types.PRODUCT_REPOSITORY)
   private ProductRepository: IProductRepository;
 
-  checkOrder = async (Id: number): Promise<boolean> => {
+  checkOrderisReachedtheMaxProductCountInADay = async (Id: number): Promise<boolean> => {
     try {
       let result = false;
       const today = new Date();
-      let orderItems: OrderOutput[] =
-        await this.orderRepository.getByCustomerId(Id);
+      let orderItems: OrderOutput[] = await this.orderRepository.getByCustomerId(Id);
       const orderItemsFiltered = orderItems.filter(
         (item) => today.toDateString() === item.PurchasedDate.toDateString()
       );
 
+      let customerProducts = [];
       for (const orderItem of orderItemsFiltered) {
-        let orderDetails: OrderDetailOutput[] =
-          await this.OrderDetailRepository.getByOrderId(orderItem.ID);
-        let customerProducts = [];
+        let orderDetails: OrderDetailOutput[] = await this.OrderDetailRepository.getByOrderId(orderItem.ID);
         if (Array.isArray(orderDetails))
           for (const orderDetailItem of orderDetails) {
             let product = await this.ProductRepository.getById(
               orderDetailItem.ProductId
             );
             customerProducts.push(product.ID);
-          }
-        result = Helpers.hasDuplicateElements(customerProducts);
+          }        
       }
+
+      let repeaters = Helpers.findRepeaterCountInArray(customerProducts);
+      let greater = 0;
+      const maxProductCount = 5;
+      repeaters.forEach((num) => { if (num > maxProductCount) greater++; });
+      if(greater >0)
+          result=true;
       return result;
     } catch (ex) {
       throw new Error("Unable to create order");

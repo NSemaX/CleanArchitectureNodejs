@@ -7,7 +7,7 @@ import { Customer } from '../../domain/models';
 export interface IOrderRepository {
     getAll: () => Promise<Array<OrderOutput>>;
     getById: (id: number) => Promise<OrderOutput>;
-    getByCustomerId: (id: number) => Promise<Array<OrderOutput>>;
+    getByCustomerId: (customerId: number) => Promise<Array<OrderOutput>>;
     create: (order: OrderInput) => Promise<any>;
     update: (id: number, order: Partial<OrderInput>) => Promise<number>;
     delete: (id: any) => Promise<boolean>;
@@ -32,11 +32,11 @@ export class OrderRepository implements IOrderRepository {
         return item
     }
 
-    getByCustomerId = async (id: number): Promise<Array<OrderOutput>> => {
+    getByCustomerId = async (customerId: number): Promise<Array<OrderOutput>> => {
 
           const customerOrders = await Order.findAll({
             where: {
-              CustomerId: id,
+              CustomerId: customerId,
             },
           });
 
