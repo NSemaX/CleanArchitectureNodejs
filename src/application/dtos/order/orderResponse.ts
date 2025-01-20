@@ -1,5 +1,6 @@
-import { CustomerOutput } from "../../domain/models/customer";
-import  { ProductOutput } from "../../domain/models/product";
+import { CustomerOutput } from "../../../domain/models/customer/customer";
+import { ProductOutput } from "../../../domain/models/product/product";
+
 
 export class orderResponse {
     Order: OrderResponseDTO;

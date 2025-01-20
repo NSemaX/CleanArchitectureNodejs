@@ -1,12 +1,9 @@
 import { inject, injectable } from "inversify";
-import Customer, { CustomerInput, CustomerOutput } from "../domain/models/customer";
 import { Types } from "../infrastructure/utility/DiTypes";
-import { ICustomerRepository } from "../infrastructure/repositories/customerRepository";
-import { APIError } from "../application/middlewares/errorHandling/BaseError";
-import { HttpStatusCode } from "../application/middlewares/errorHandling/HttpStatusCodeEnums";
 import { ICustomerDomainService } from "../domain.services/customerDomainService";
-import { CustomerResponse } from "../application/dtos/customerResponse";
-import { CustomerRequest } from "../application/dtos/customerRequest";
+import { ICustomerRepository } from "../domain/models/customer/ICustomerRepository";
+import { CustomerResponse } from "../application/dtos/customer/customerResponse";
+import { CustomerRequest } from "../application/dtos/customer/customerRequest";
 
 export interface ICustomerApplicationService {
 

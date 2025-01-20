@@ -1,9 +1,8 @@
 import { inject, injectable } from "inversify";
-import Product, { ProductInput, ProductOutput } from "../domain/models/product";
 import { Types } from "../infrastructure/utility/DiTypes";
-import { IProductRepository } from "../infrastructure/repositories/productRepository";
-import { ProductResponse } from "../application/dtos/productResponse";
-import { ProductRequest } from "../application/dtos/productRequest";
+import { IProductRepository } from "../domain/models/product/IProductRepository";
+import { ProductResponse } from "../application/dtos/product/productResponse";
+import { ProductRequest } from "../application/dtos/product/productRequest";
 
 export interface IProductApplicationService {
 

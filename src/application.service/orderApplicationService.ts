@@ -1,14 +1,16 @@
 import { inject, injectable } from "inversify";
 import  { OrderInput, OrderOutput } from "../domain/aggregates/orderAggregate/order";
 import { Types } from "../infrastructure/utility/DiTypes";
-import { IOrderRepository } from "../infrastructure/repositories/orderRepository";
-import orderResponse, { OrderResponseDTO, OrderDetailResponseDTO } from "../application/dtos/orderResponse";
 import { OrderDetailOutput } from "../domain/aggregates/orderAggregate/orderDetail";
-import { IProductRepository } from "../infrastructure/repositories/productRepository";
-import { ICustomerRepository } from "../infrastructure/repositories/customerRepository";
-import orderRequest from "../application/dtos/orderRequest";
+import orderRequest from "../application/dtos/order/orderCreateRequest";
 import { IOrderDomainService } from "../domain.services/orderDomainService";
-import { IOrderDetailRepository } from "../infrastructure/repositories/orderDetailRepository";
+import { IProductRepository } from "../domain/models/product/IProductRepository";
+import { ICustomerRepository } from "../domain/models/customer/ICustomerRepository";
+import { orderUpdateRequest } from "../application/dtos/order/orderUpdateRequest";
+import { IOrderDetailRepository } from "../domain/aggregates/orderAggregate/IOrderDetailRepository";
+import { IOrderRepository } from "../domain/aggregates/orderAggregate/IOrderRepository";
+import { OrderStatus } from "../domain/aggregates/orderAggregate/OrderStatus";
+import orderResponse, { OrderDetailResponseDTO, OrderResponseDTO } from "../application/dtos/order/orderResponse";
 
 export interface IOrderApplicationService {
   getAllOrders: () => Promise<Array<OrderOutput>>;
@@ -75,17 +77,21 @@ export class OrderApplicationService implements IOrderApplicationService {
 
   createOrder = async (orderRequest: orderRequest): Promise<any> => {
     try {
-      let isReachedMaxProductInADay = await this.orderDomainService.checkOrderisReachedtheMaxProductCountInADay(orderRequest.Order.CustomerId);
+      let isReachedMaxProductInADay = await this.orderDomainService.isOrderReachedtheMaxProductCountInADay(orderRequest.Order.CustomerId);
       
       if (!isReachedMaxProductInADay)
       {
-        let OrderAggregateItemID = await this.orderRepository.create(orderRequest.Order);
-
+        let TotalAmount=0;
+        let OrderItem:OrderInput={CustomerId:orderRequest.Order.CustomerId,Status:OrderStatus.Submitted,PurchasedDate:orderRequest.Order.PurchasedDate};
+        let OrderAggregateItemID = await this.orderRepository.create(OrderItem);
         if (OrderAggregateItemID > 0)
           orderRequest.OrderDetails.forEach(async (orderDetailItem: any) => {
             orderDetailItem.OrderId = OrderAggregateItemID;
+            TotalAmount += orderDetailItem.Product.Price * orderDetailItem.Count ;
             await this.OrderDetailRepository.create(orderDetailItem);
           });
+          OrderItem.TotalAmount=TotalAmount;
+          await this.orderRepository.update(OrderAggregateItemID,OrderItem);
           return OrderAggregateItemID;
       }     
       throw new Error("Unable to create order, reached to max product count in a day.");
@@ -94,7 +100,7 @@ export class OrderApplicationService implements IOrderApplicationService {
     }
   };
 
-  updateOrder = async (Id: number, order: OrderInput): Promise<number> => {
+  updateOrder = async (Id: number, order: orderUpdateRequest): Promise<number> => {
     try {
       return this.orderRepository.update(Id, order);
     } catch {
@@ -114,7 +120,6 @@ export class OrderApplicationService implements IOrderApplicationService {
     const orderResponseItem = new orderResponse();
     orderResponseItem.OrderDetails = [];
 
-    let TotalAmount=0;
     let OrderDTOItem = new OrderResponseDTO();
 
     OrderDTOItem.ID = order.ID;
@@ -129,13 +134,11 @@ export class OrderApplicationService implements IOrderApplicationService {
         const OrderDetailDTOItem = new OrderDetailResponseDTO();
         OrderDetailDTOItem.ID = orderDetailItem.ID;
         OrderDetailDTOItem.Product = await this.ProductRepository.getById(orderDetailItem.ProductId);
-        TotalAmount += OrderDetailDTOItem.Product.Price * orderDetailItem.Count ;
         OrderDetailDTOItem.Count = orderDetailItem.Count;
         OrderDetailDTOItem.OrderId = orderDetailItem.OrderId;
         OrderDetailDTOItems.push(OrderDetailDTOItem);
       }
 
-    OrderDTOItem.TotalAmount=TotalAmount;
     orderResponseItem.Order = OrderDTOItem;
     orderResponseItem.OrderDetails = OrderDetailDTOItems;
 

@@ -3,7 +3,7 @@ import { inject, injectable } from "inversify";
 import { StatusCode } from "../../infrastructure/utility/statusCodes";
 import { Types } from "../../infrastructure/utility/DiTypes";
 import { IProductApplicationService } from "../../application.service/productApplicationService";
-import { ProductInput } from "../../domain/models/product";
+import { ProductInput } from "../../domain/models/product/product";
 
 
 export interface IProductController {

@@ -1,20 +1,12 @@
 import { Op } from 'sequelize'
 import { inject, injectable } from "inversify";
 import "reflect-metadata";
-import Customer, { CustomerInput, CustomerOutput } from '../../domain/models/customer'
+import Customer, { CustomerInput, CustomerOutput } from '../../domain/models/customer/customer'
 import { HttpStatusCode } from '../../application/middlewares/errorHandling/HttpStatusCodeEnums';
 import { APIError } from '../../application/middlewares/errorHandling/BaseError';
 import { NotFoundException } from '../../application/middlewares/errorHandling/APIExceptions';
 import { errorMessages } from '../../application/middlewares/errorHandling/errorMessages';
-
-export interface ICustomerRepository {
-    getAll: () => Promise<Array<CustomerOutput>>;
-    getById: (id: number) => Promise<CustomerOutput>;
-    create: (Customer: CustomerInput) => Promise<any>;
-    update: (id: number, Customer: Partial<CustomerInput>) => Promise<number>;
-    delete: (id: any) => Promise<boolean>;
-}
-
+import { ICustomerRepository } from '../../domain/models/customer/ICustomerRepository';
 
 @injectable()
 export class CustomerRepository implements ICustomerRepository {

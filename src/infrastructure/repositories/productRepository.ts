@@ -1,15 +1,8 @@
 import { Op } from 'sequelize'
 import { inject, injectable } from "inversify";
 import "reflect-metadata";
-import Product, { ProductInput, ProductOutput } from '../../domain/models/product'
-
-export interface IProductRepository {
-    getAll: () => Promise<Array<ProductOutput>>;
-    getById: (id: number) => Promise<ProductOutput>;
-    create: (Product: ProductInput) => Promise<any>;
-    update: (id: number, Product: Partial<ProductInput>) => Promise<number>;
-    delete: (id: any) => Promise<boolean>;
-}
+import Product, { ProductInput, ProductOutput } from '../../domain/models/product/product'
+import { IProductRepository } from '../../domain/models/product/IProductRepository';
 
 
 @injectable()

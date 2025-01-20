@@ -2,16 +2,7 @@ import { Op } from 'sequelize'
 import { inject, injectable } from "inversify";
 import "reflect-metadata";
 import OrderDetail, { OrderDetailInput, OrderDetailOutput } from '../../domain/aggregates/orderAggregate/orderDetail'
-
-export interface IOrderDetailRepository {
-    getAll: () => Promise<Array<OrderDetailOutput>>;
-    getById: (id: number) => Promise<OrderDetailOutput>;
-    getByOrderId: (id: number) => Promise<Array<OrderDetailOutput>>;
-    create: (OrderDetail: OrderDetailInput) => Promise<any>;
-    update: (id: number, OrderDetail: Partial<OrderDetailInput>) => Promise<number>;
-    delete: (id: any) => Promise<boolean>;
-}
-
+import { IOrderDetailRepository } from '../../domain/aggregates/orderAggregate/IOrderDetailRepository';
 
 @injectable()
 export class OrderDetailRepository implements IOrderDetailRepository {

@@ -1,18 +1,13 @@
 import { inject, injectable } from "inversify";
-import Order, {
-  OrderInput,
-  OrderOutput,
-} from "../domain/aggregates/orderAggregate/order";
-import OrderDetail, {
-  OrderDetailOutput,
-} from "../domain/aggregates/orderAggregate/orderDetail";
+import Order, {OrderInput,OrderOutput,} from "../domain/aggregates/orderAggregate/order";
+import OrderDetail, {OrderDetailOutput,} from "../domain/aggregates/orderAggregate/orderDetail";
 import { Types } from "../infrastructure/utility/DiTypes";
-import { IOrderRepository } from "../infrastructure/repositories/orderRepository";
-import { IOrderDetailRepository } from "../infrastructure/repositories/orderDetailRepository";
-import { IProductRepository } from "../infrastructure/repositories/productRepository";
+import { IProductRepository } from "../domain/models/product/IProductRepository";
+import { IOrderRepository } from "../domain/aggregates/orderAggregate/IOrderRepository";
+import { IOrderDetailRepository } from "../domain/aggregates/orderAggregate/IOrderDetailRepository";
 
 export interface IOrderDomainService {
-  checkOrderisReachedtheMaxProductCountInADay: (Id: number) => Promise<boolean>;
+  isOrderReachedtheMaxProductCountInADay: (Id: number) => Promise<boolean>;
 }
 
 @injectable()
@@ -26,7 +21,7 @@ export class OrderDomainService implements IOrderDomainService {
   @inject(Types.PRODUCT_REPOSITORY)
   private ProductRepository: IProductRepository;
 
-  checkOrderisReachedtheMaxProductCountInADay = async (Id: number): Promise<boolean> => {
+  isOrderReachedtheMaxProductCountInADay = async (Id: number): Promise<boolean> => {
     try {
       let result = false;
       const today = new Date();
@@ -49,9 +44,9 @@ export class OrderDomainService implements IOrderDomainService {
 
       let repeaters = Helpers.findRepeaterCountInArray(customerProducts);
       let greater = 0;
-      const maxProductCount = 5;
-      repeaters.forEach((num) => { if (num > maxProductCount) greater++; });
-      if(greater >0)
+      const maxOrderableProductCountInADay = 5;
+      repeaters.forEach((num) => { if (num > maxOrderableProductCountInADay) greater++; });
+      if(greater > 0)
           result=true;
       return result;
     } catch (ex) {
