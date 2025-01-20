@@ -1,20 +1,21 @@
 import { Container } from "inversify";
 import { Types } from "./infrastructure/utility/DiTypes";
-import { IOrderRepository,OrderRepository,} from "./infrastructure/repositories/orderRepository";
+import { OrderRepository,} from "./infrastructure/repositories/orderRepository";
 import { IOrderController,OrderController,} from "./application/controllers/orderController";
 import { IOrderDomainService, OrderDomainService } from "./domain.services/orderDomainService";
 import { IOrderApplicationService, OrderApplicationService } from "./application.service/orderApplicationService";
-
-import { IProductRepository, ProductRepository } from "./infrastructure/repositories/productRepository";
+import { ProductRepository } from "./infrastructure/repositories/productRepository";
 import { IProductController,ProductController,} from "./application/controllers/productController";
 import { IProductApplicationService, ProductApplicationService } from "./application.service/productApplicationService";
-
-import { IOrderDetailRepository, OrderDetailRepository } from "./infrastructure/repositories/orderDetailRepository";
-
-import { ICustomerRepository, CustomerRepository } from "./infrastructure/repositories/customerRepository";
+import { OrderDetailRepository } from "./infrastructure/repositories/orderDetailRepository";
+import { CustomerRepository } from "./infrastructure/repositories/customerRepository";
 import { ICustomerController,CustomerController,} from "./application/controllers/customerController";
 import { ICustomerDomainService, CustomerDomainService } from "./domain.services/customerDomainService";
 import { ICustomerApplicationService, CustomerApplicationService } from "./application.service/customerApplicationService";
+import { IOrderRepository } from "./domain/aggregates/orderAggregate/IOrderRepository";
+import { IProductRepository } from "./domain/models/product/IProductRepository";
+import { IOrderDetailRepository } from "./domain/aggregates/orderAggregate/IOrderDetailRepository";
+import { ICustomerRepository } from "./domain/models/customer/ICustomerRepository";
 
 
 const dIContainer = new Container();

@@ -2,7 +2,7 @@ import { Request, Response } from "express";
 import { inject, injectable } from "inversify";
 import { StatusCode } from "../../infrastructure/utility/statusCodes";
 import { Types } from "../../infrastructure/utility/DiTypes";
-import orderAggregateRequest from "../dtos/order/orderCreateRequest";
+import orderAggregateRequest, { orderCreateRequest } from "../dtos/order/orderCreateRequest";
 import { IOrderApplicationService } from "../../application.service/orderApplicationService";
 import { OrderInput } from "../../domain/aggregates/orderAggregate/order";
 
@@ -55,7 +55,7 @@ export class OrderController implements IOrderController {
   public createOrder = async (req: Request, res: Response) => {
     try {
       const { Order :{ CustomerId, TotalAmount, Status, PurchasedDate}, OrderDetails: [{ProductId, Count}]} = req.body;
-      const orderReq: orderAggregateRequest = {Order:{ CustomerId, Status, PurchasedDate},OrderDetails: [{ ProductId, Count}]}; 
+      const orderReq: orderCreateRequest = {Order:{ CustomerId, PurchasedDate},OrderDetails: [{ ProductId, Count}]}; 
       const order = await this.orderApplicationService.createOrder(orderReq);
       res.status(StatusCode.SUCCESS).send();
     } catch (ex) {
