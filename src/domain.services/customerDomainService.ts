@@ -18,7 +18,7 @@ export class CustomerDomainService implements ICustomerDomainService {
     try { 
       const customerAlreadyExists = await this.CustomerRepository.findByEmail(Customer.Email);
       if (customerAlreadyExists) {
-        throw new Error("Unable to create customer, customer is already created.");
+        throw new Error("Unable to create customer, customer is already exists.");
       }
       return this.CustomerRepository.create(Customer);
     } catch (ex) {

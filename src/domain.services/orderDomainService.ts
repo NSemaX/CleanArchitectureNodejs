@@ -1,6 +1,6 @@
 import { inject, injectable } from "inversify";
-import Order, {OrderInput,OrderOutput,} from "../domain/aggregates/orderAggregate/order";
-import OrderDetail, {OrderDetailOutput,} from "../domain/aggregates/orderAggregate/orderDetail";
+import {OrderOutput} from "../domain/aggregates/orderAggregate/order";
+import {OrderDetailOutput} from "../domain/aggregates/orderAggregate/orderDetail";
 import { Types } from "../infrastructure/utility/DiTypes";
 import { IProductRepository } from "../domain/models/product/IProductRepository";
 import { IOrderRepository } from "../domain/aggregates/orderAggregate/IOrderRepository";

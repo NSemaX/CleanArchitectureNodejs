@@ -82,7 +82,7 @@ export class OrderApplicationService implements IOrderApplicationService {
       if (!isReachedMaxProductInADay)
       {
         let TotalAmount=0;
-        let OrderItem:OrderInput={CustomerId:orderRequest.Order.CustomerId,Status:OrderStatus.Submitted,PurchasedDate:orderRequest.Order.PurchasedDate};
+        let OrderItem:OrderInput={CustomerId:orderRequest.Order.CustomerId,Status:OrderStatus.Created,PurchasedDate:orderRequest.Order.PurchasedDate};
         let OrderAggregateItemID = await this.orderRepository.create(OrderItem);
         if (OrderAggregateItemID > 0)
           orderRequest.OrderDetails.forEach(async (orderDetailItem: any) => {
