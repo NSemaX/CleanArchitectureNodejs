@@ -4,6 +4,8 @@ import { StatusCode } from "../../infrastructure/utility/statusCodes";
 import { Types } from "../../infrastructure/utility/DiTypes";
 import { CustomerInput } from "../../domain/models/customer/customer";
 import { ICustomerApplicationService } from "../../application.service/customerApplicationService";
+import CustomerCreateRequest from "../dtos/customer/customerCreateRequest";
+import { CustomerUpdateRequest } from "../dtos/customer/customerUpdateRequest";
 
 
 
@@ -47,9 +49,9 @@ export class CustomerController implements ICustomerController {
   
   public createCustomer = async (req: Request, res: Response) => {
     try {
-      const { Name,Surname,Email,Password,Status } = req.body;
-      const customer: CustomerInput = {Name,Surname,Email,Password,Status}; 
-      const Customer = await this.CustomerApplicationService.createCustomer(customer);
+      const { Name,Surname,Email,Password } = req.body;
+      const customerCreateRequest: CustomerCreateRequest = {Name,Surname,Email,Password}; 
+      const customer = await this.CustomerApplicationService.createCustomer(customerCreateRequest);
       res.status(StatusCode.SUCCESS).send();
     } catch (ex) {
       res.status(StatusCode.SERVER_ERROR).send({
@@ -62,9 +64,9 @@ export class CustomerController implements ICustomerController {
   public updateCustomer = async (req: Request, res: Response) => {
     try {
       const { Name,Surname,Email,Password,Status } = req.body;
-      const customer: CustomerInput = {Name, Surname, Email, Password, Status}; 
-      const id= customer.ID!;
-      const updatedCustomerCount = await this.CustomerApplicationService.updateCustomer(id, customer);
+      const customerUpdateRequest: CustomerUpdateRequest = {Name, Surname, Email, Password, Status}; 
+      const id= customerUpdateRequest.ID!;
+      const updatedCustomerCount = await this.CustomerApplicationService.updateCustomer(id, customerUpdateRequest);
       res.status(StatusCode.SUCCESS).send();
     } catch (ex) {
       if((ex as Error).message=="not found")

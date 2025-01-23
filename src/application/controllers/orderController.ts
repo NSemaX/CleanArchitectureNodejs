@@ -5,6 +5,7 @@ import { Types } from "../../infrastructure/utility/DiTypes";
 import { OrderCreateRequest } from "../dtos/order/orderCreateRequest";
 import { IOrderApplicationService } from "../../application.service/orderApplicationService";
 import { OrderInput } from "../../domain/aggregates/orderAggregate/order";
+import OrderUpdateRequest from "../dtos/order/orderUpdateRequest";
 
 
 
@@ -12,6 +13,7 @@ import { OrderInput } from "../../domain/aggregates/orderAggregate/order";
 export interface IOrderController {
   getAllOrders: (req: Request, res: Response) => Promise<Response>;
   getOrderById: (req: Request, res: Response) => Promise<Response>;
+  getOrdersByCustomerId:(req: Request, res: Response) => Promise<Response>;
   createOrder: (req: Request, res: Response) => Promise<any>;
   updateOrder: (req: Request, res: Response) => Promise<any>;
   deleteOrder: (req: Request, res: Response) => Promise<any>;
@@ -52,9 +54,23 @@ export class OrderController implements IOrderController {
     }
   };
 
+
+  public getOrdersByCustomerId = async (req: Request, res: Response): Promise<Response> => {
+    try {
+      const customerId = Number(req.params.id)
+      const orders = await this.orderApplicationService.getOrdersByCustomerId(customerId);
+      return res.status(StatusCode.SUCCESS).send(orders);
+    } catch (ex) {
+      if((ex as Error).message=="not found")
+      return res.status(StatusCode.NOT_FOUND).json({message: (ex as Error).message});
+      else
+      return res.status(StatusCode.SERVER_ERROR).json({message: (ex as Error).message});
+    }
+  };
+
   public createOrder = async (req: Request, res: Response) => {
     try {
-      const { Order :{ CustomerId, TotalAmount, Status, PurchasedDate}, OrderDetails: [{ProductId, Count}]} = req.body;
+      const { Order :{ CustomerId, PurchasedDate}, OrderDetails: [{ProductId, Count}]} = req.body;
       const orderReq: OrderCreateRequest = {Order:{ CustomerId, PurchasedDate},OrderDetails: [{ ProductId, Count}]}; 
       const order = await this.orderApplicationService.createOrder(orderReq);
       res.status(StatusCode.SUCCESS).send();
@@ -69,7 +85,7 @@ export class OrderController implements IOrderController {
   public updateOrder = async (req: Request, res: Response) => {
     try {
       const { ID, CustomerId, TotalAmount, Status, PurchasedDate } = req.body;
-      const order: OrderInput = {ID, CustomerId, TotalAmount, Status, PurchasedDate}; 
+      const order: OrderUpdateRequest = {ID, CustomerId, TotalAmount, Status, PurchasedDate}; 
       const id= order.ID!;
       const updatedOrderCount = await this.orderApplicationService.updateOrder(id, order);
       res.status(StatusCode.SUCCESS).send();

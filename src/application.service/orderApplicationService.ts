@@ -15,9 +15,9 @@ import orderResponse, { OrderDetailResponseDTO, OrderResponseDTO } from "../appl
 export interface IOrderApplicationService {
   getAllOrders: () => Promise<Array<OrderOutput>>;
   getOrderById: (Id: number) => Promise<orderResponse>;
-  getOrderByCustomerId: (Id: number) => Promise<Array<orderResponse>>;
+  getOrdersByCustomerId: (Id: number) => Promise<Array<orderResponse>>;
   createOrder: (orderAggregateRequest: OrderCreateRequest) => Promise<any>;
-  updateOrder: (Id: number, order: OrderInput) => Promise<number>;
+  updateOrder: (Id: number, order: OrderUpdateRequest) => Promise<number>;
   deleteOrder: (Id: number) => Promise<boolean>;
 }
 
@@ -59,7 +59,7 @@ export class OrderApplicationService implements IOrderApplicationService {
     }
   };
 
-  getOrderByCustomerId = async (CustomerId: number): Promise<Array<orderResponse>> => {
+  getOrdersByCustomerId = async (CustomerId: number): Promise<Array<orderResponse>> => {
     try {
       let orderAggregateResponseList : orderResponse[] = new Array<orderResponse>();
       let orderItems : OrderOutput[] = await this.orderRepository.getByCustomerId(CustomerId);
@@ -75,17 +75,17 @@ export class OrderApplicationService implements IOrderApplicationService {
     }
   };
 
-  createOrder = async (orderRequest: OrderCreateRequest): Promise<any> => {
+  createOrder = async (orderCreateRequest: OrderCreateRequest): Promise<any> => {
     try {
-      let isReachedMaxProductInADay = await this.orderDomainService.isOrderReachedtheMaxProductCountInADay(orderRequest.Order.CustomerId);
+      let isReachedMaxProductInADay = await this.orderDomainService.isOrderReachedtheMaxProductCountInADay(orderCreateRequest.Order.CustomerId);
       
       if (!isReachedMaxProductInADay)
       {
         let TotalAmount=0;
-        let OrderItem:OrderInput={CustomerId:orderRequest.Order.CustomerId,Status:OrderStatus.Created,PurchasedDate:orderRequest.Order.PurchasedDate};
+        let OrderItem:OrderInput={CustomerId:orderCreateRequest.Order.CustomerId,Status:OrderStatus.Created,PurchasedDate:orderCreateRequest.Order.PurchasedDate};
         let OrderAggregateItemID = await this.orderRepository.create(OrderItem);
         if (OrderAggregateItemID > 0)
-          orderRequest.OrderDetails.forEach(async (orderDetailItem: any) => {
+          orderCreateRequest.OrderDetails.forEach(async (orderDetailItem: any) => {
             orderDetailItem.OrderId = OrderAggregateItemID;
             TotalAmount += orderDetailItem.Product.Price * orderDetailItem.Count ;
             await this.OrderDetailRepository.create(orderDetailItem);
@@ -100,9 +100,9 @@ export class OrderApplicationService implements IOrderApplicationService {
     }
   };
 
-  updateOrder = async (Id: number, order: OrderUpdateRequest): Promise<number> => {
+  updateOrder = async (Id: number, orderUpdateRequest: OrderUpdateRequest): Promise<number> => {
     try {
-      return this.orderRepository.update(Id, order);
+      return this.orderRepository.update(Id, orderUpdateRequest);
     } catch {
       throw new Error("Unable to updated order");
     }

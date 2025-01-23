@@ -3,14 +3,17 @@ import { Types } from "../infrastructure/utility/DiTypes";
 import { ICustomerDomainService } from "../domain.services/customerDomainService";
 import { ICustomerRepository } from "../domain/models/customer/ICustomerRepository";
 import { CustomerResponse } from "../application/dtos/customer/customerResponse";
-import { CustomerRequest } from "../application/dtos/customer/customerRequest";
+import CustomerCreateRequest from "../application/dtos/customer/customerCreateRequest";
+import { CustomerUpdateRequest } from "../application/dtos/customer/customerUpdateRequest";
+import { CustomerInput } from "../domain/models/customer/customer";
+import { CustomerStatus } from "../domain/models/customer/customerStatus";
 
 export interface ICustomerApplicationService {
 
   getCustomerById: (Id: number) => Promise<CustomerResponse>;
   getAllCustomers: () => Promise<Array<CustomerResponse>>;
-  createCustomer: (Customer: CustomerRequest) => Promise<any>;
-  updateCustomer: (Id: number, Customer: CustomerRequest) => Promise<number>;
+  createCustomer: (Customer: CustomerCreateRequest) => Promise<any>;
+  updateCustomer: (Id: number, Customer: CustomerUpdateRequest) => Promise<number>;
   deleteCustomer: (Id: number) => Promise<boolean>;
 }
 
@@ -38,15 +41,16 @@ export class CustomerApplicationService implements ICustomerApplicationService {
     }
   };
 
-  createCustomer = async (Customer: CustomerRequest): Promise<any> => {
-    try { //check email duplicated?
-      return this.CustomerDomainService.createCustomer(Customer);
+  createCustomer = async (Customer: CustomerCreateRequest): Promise<any> => {
+    try { 
+       let CustomerItem:CustomerInput={Name:Customer.Name, Surname:Customer.Surname,Email:Customer.Email,Password:Customer.Password,Status:CustomerStatus.Active};
+      return this.CustomerDomainService.createCustomer(CustomerItem);
     } catch (ex) {
       throw new Error("Unable to create Customer");
     }
   };
 
-  updateCustomer = async (Id: number, Customer: CustomerRequest): Promise<number> => {
+  updateCustomer = async (Id: number, Customer: CustomerUpdateRequest): Promise<number> => {
     try {
       return this.CustomerRepository.update(Id, Customer);
     } catch {

@@ -30,16 +30,12 @@ export class CustomerRepository implements ICustomerRepository {
         return item
     }
 
-    findByEmail = async (email: string) : Promise<CustomerOutput> => {
+    findByEmail = async (email: string) : Promise<any> => {
         const item = await Customer.findOne({
             where: {
               Email: email,
             },
           });
-
-        if (!item) {
-            throw new Error('not found')
-        }
         return item
     }
 

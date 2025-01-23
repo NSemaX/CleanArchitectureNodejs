@@ -1,8 +1,14 @@
 {
   "openapi": "3.0.1",
   "info": {
-    "title": "NSShop",
-    "version": "1.0"
+    "title": "NSShop API",
+    "description": "This is a Clean Architercture applied Node.js - Typescript API",
+    "contact": {
+      "name": "Nagihan Sema KUDU",
+      "url": "http://www.semakudu.com/",
+      "email": "sema@semakudu.com"
+    },
+    "version": "v1"
   },
   "paths": {
     "/api/customers": {
@@ -10,6 +16,8 @@
         "tags": [
           "Customer"
         ],
+        "summary": "Get all customers",
+        "description": "Gets all customers",
         "responses": {
           "200": {
             "description": "Success",
@@ -18,7 +26,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/GetCustomerResponse"
+                    "$ref": "#/components/schemas/CustomerResponse"
                   }
                 }
               },
@@ -26,7 +34,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/GetCustomerResponse"
+                    "$ref": "#/components/schemas/CustomerResponse"
                   }
                 }
               },
@@ -34,14 +42,14 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/GetCustomerResponse"
+                    "$ref": "#/components/schemas/CustomerResponse"
                   }
                 }
               }
             }
           },
           "404": {
-            "description": "Not Found",
+            "description": "Product not found",
             "content": {
               "text/plain": {
                 "schema": {
@@ -60,8 +68,11 @@
               }
             }
           },
-          "500": {
-            "description": "Server Error"
+          "400": {
+            "description": "Validation Error"
+          },
+          "401": {
+            "description": "Unauthorized"
           }
         }
       },
@@ -69,21 +80,23 @@
         "tags": [
           "Customer"
         ],
+        "summary": "Create customer",
+        "description": "Creates a customer",
         "requestBody": {
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/CreateCustomerRequest"
+                "$ref": "#/components/schemas/CustomerCreateRequest"
               }
             },
             "text/json": {
               "schema": {
-                "$ref": "#/components/schemas/CreateCustomerRequest"
+                "$ref": "#/components/schemas/CustomerCreateRequest"
               }
             },
             "application/*+json": {
               "schema": {
-                "$ref": "#/components/schemas/CreateCustomerRequest"
+                "$ref": "#/components/schemas/CustomerCreateRequest"
               }
             }
           }
@@ -91,6 +104,12 @@
         "responses": {
           "200": {
             "description": "Success"
+          },
+          "400": {
+            "description": "Validation Error"
+          },
+          "401": {
+            "description": "Unauthorized"
           }
         }
       },
@@ -98,21 +117,23 @@
         "tags": [
           "Customer"
         ],
+        "summary": "Update customer",
+        "description": "Updates a customer",
         "requestBody": {
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/UpdateCustomerRequest"
+                "$ref": "#/components/schemas/CustomerUpdateRequest"
               }
             },
             "text/json": {
               "schema": {
-                "$ref": "#/components/schemas/UpdateCustomerRequest"
+                "$ref": "#/components/schemas/CustomerUpdateRequest"
               }
             },
             "application/*+json": {
               "schema": {
-                "$ref": "#/components/schemas/UpdateCustomerRequest"
+                "$ref": "#/components/schemas/CustomerUpdateRequest"
               }
             }
           }
@@ -120,19 +141,31 @@
         "responses": {
           "200": {
             "description": "Success"
+          },
+          "400": {
+            "description": "Validation Error"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Customer not found"
           }
         }
       }
     },
-    "/api/customers/{customerId}": {
+    "/api/customers/{id}": {
       "get": {
         "tags": [
           "Customer"
         ],
+        "summary": "Get customer by Id",
+        "description": "Gets a customer according to given customerId",
         "parameters": [
           {
-            "name": "customerId",
+            "name": "id",
             "in": "path",
+            "description": "Related customerId",
             "required": true,
             "schema": {
               "type": "integer",
@@ -146,43 +179,32 @@
             "content": {
               "text/plain": {
                 "schema": {
-                  "$ref": "#/components/schemas/GetCustomerResponse"
+                  "$ref": "#/components/schemas/CustomerResponse"
                 }
               },
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/GetCustomerResponse"
+                  "$ref": "#/components/schemas/CustomerResponse"
                 }
               },
               "text/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/GetCustomerResponse"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Not Found",
-            "content": {
-              "text/plain": {
-                "schema": {
-                  "$ref": "#/components/schemas/ProblemDetails"
-                }
-              },
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ProblemDetails"
-                }
-              },
-              "text/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ProblemDetails"
+                  "$ref": "#/components/schemas/CustomerResponse"
                 }
               }
             }
           },
           "500": {
             "description": "Server Error"
+          },
+          "400": {
+            "description": "Validation Error"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Customer not found"
           }
         }
       },
@@ -190,20 +212,30 @@
         "tags": [
           "Customer"
         ],
+        "summary": "Delete customer",
+        "description": "Deletes a customer",
         "parameters": [
           {
-            "name": "customerId",
+            "name": "id",
             "in": "path",
             "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "string"
             }
           }
         ],
         "responses": {
           "200": {
             "description": "Success"
+          },
+          "400": {
+            "description": "Validation Error"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Customer not found"
           }
         }
       }
@@ -213,6 +245,8 @@
         "tags": [
           "Order"
         ],
+        "summary": "Get all orders",
+        "description": "Gets all orders",
         "responses": {
           "200": {
             "description": "Success",
@@ -221,7 +255,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/GetOrderResponse"
+                    "$ref": "#/components/schemas/OrderResponseDTO"
                   }
                 }
               },
@@ -229,7 +263,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/GetOrderResponse"
+                    "$ref": "#/components/schemas/OrderResponseDTO"
                   }
                 }
               },
@@ -237,14 +271,14 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/GetOrderResponse"
+                    "$ref": "#/components/schemas/OrderResponseDTO"
                   }
                 }
               }
             }
           },
           "404": {
-            "description": "Not Found",
+            "description": "Product not found",
             "content": {
               "text/plain": {
                 "schema": {
@@ -263,8 +297,11 @@
               }
             }
           },
-          "500": {
-            "description": "Server Error"
+          "400": {
+            "description": "Validation Error"
+          },
+          "401": {
+            "description": "Unauthorized"
           }
         }
       },
@@ -272,21 +309,23 @@
         "tags": [
           "Order"
         ],
+        "summary": "Create order",
+        "description": "Creates an order",
         "requestBody": {
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/CreateOrderRequest"
+                "$ref": "#/components/schemas/OrderCreateRequest"
               }
             },
             "text/json": {
               "schema": {
-                "$ref": "#/components/schemas/CreateOrderRequest"
+                "$ref": "#/components/schemas/OrderCreateRequest"
               }
             },
             "application/*+json": {
               "schema": {
-                "$ref": "#/components/schemas/CreateOrderRequest"
+                "$ref": "#/components/schemas/OrderCreateRequest"
               }
             }
           }
@@ -294,6 +333,12 @@
         "responses": {
           "200": {
             "description": "Success"
+          },
+          "400": {
+            "description": "Validation Error"
+          },
+          "401": {
+            "description": "Unauthorized"
           }
         }
       },
@@ -301,21 +346,23 @@
         "tags": [
           "Order"
         ],
+        "summary": "Update order",
+        "description": "Updates an order",
         "requestBody": {
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/UpdateOrderRequest"
+                "$ref": "#/components/schemas/OrderUpdateRequest"
               }
             },
             "text/json": {
               "schema": {
-                "$ref": "#/components/schemas/UpdateOrderRequest"
+                "$ref": "#/components/schemas/OrderUpdateRequest"
               }
             },
             "application/*+json": {
               "schema": {
-                "$ref": "#/components/schemas/UpdateOrderRequest"
+                "$ref": "#/components/schemas/OrderUpdateRequest"
               }
             }
           }
@@ -323,19 +370,31 @@
         "responses": {
           "200": {
             "description": "Success"
+          },
+          "400": {
+            "description": "Validation Error"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Order not found"
           }
         }
       }
     },
-    "/api/orders/{orderId}": {
+    "/api/orders/{id}": {
       "get": {
         "tags": [
           "Order"
         ],
+        "summary": "Get an order by Id",
+        "description": "Gets order according to given orderId",
         "parameters": [
           {
-            "name": "orderId",
+            "name": "id",
             "in": "path",
+            "description": "Related orderId",
             "required": true,
             "schema": {
               "type": "integer",
@@ -349,43 +408,32 @@
             "content": {
               "text/plain": {
                 "schema": {
-                  "$ref": "#/components/schemas/GetOrderResponse"
+                  "$ref": "#/components/schemas/OrderResponse"
                 }
               },
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/GetOrderResponse"
+                  "$ref": "#/components/schemas/OrderResponse"
                 }
               },
               "text/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/GetOrderResponse"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Not Found",
-            "content": {
-              "text/plain": {
-                "schema": {
-                  "$ref": "#/components/schemas/ProblemDetails"
-                }
-              },
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ProblemDetails"
-                }
-              },
-              "text/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ProblemDetails"
+                  "$ref": "#/components/schemas/OrderResponse"
                 }
               }
             }
           },
           "500": {
             "description": "Server Error"
+          },
+          "400": {
+            "description": "Validation Error"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Order not found"
           }
         }
       },
@@ -393,152 +441,46 @@
         "tags": [
           "Order"
         ],
+        "summary": "Delete order",
+        "description": "Deletes an order",
         "parameters": [
           {
-            "name": "orderId",
+            "name": "id",
             "in": "path",
             "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "string"
             }
           }
         ],
         "responses": {
           "200": {
             "description": "Success"
-          }
-        }
-      }
-    },
-    "/api/orderdetails": {
-      "get": {
-        "tags": [
-          "OrderDetail"
-        ],
-        "responses": {
-          "200": {
-            "description": "Success",
-            "content": {
-              "text/plain": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/GetOrderDetailResponse"
-                  }
-                }
-              },
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/GetOrderDetailResponse"
-                  }
-                }
-              },
-              "text/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/GetOrderDetailResponse"
-                  }
-                }
-              }
-            }
+          },
+          "400": {
+            "description": "Validation Error"
+          },
+          "401": {
+            "description": "Unauthorized"
           },
           "404": {
-            "description": "Not Found",
-            "content": {
-              "text/plain": {
-                "schema": {
-                  "$ref": "#/components/schemas/ProblemDetails"
-                }
-              },
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ProblemDetails"
-                }
-              },
-              "text/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ProblemDetails"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Server Error"
-          }
-        }
-      },
-      "post": {
-        "tags": [
-          "OrderDetail"
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/CreateOrderDetailRequest"
-              }
-            },
-            "text/json": {
-              "schema": {
-                "$ref": "#/components/schemas/CreateOrderDetailRequest"
-              }
-            },
-            "application/*+json": {
-              "schema": {
-                "$ref": "#/components/schemas/CreateOrderDetailRequest"
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "Success"
-          }
-        }
-      },
-      "put": {
-        "tags": [
-          "OrderDetail"
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/UpdateOrderDetailRequest"
-              }
-            },
-            "text/json": {
-              "schema": {
-                "$ref": "#/components/schemas/UpdateOrderDetailRequest"
-              }
-            },
-            "application/*+json": {
-              "schema": {
-                "$ref": "#/components/schemas/UpdateOrderDetailRequest"
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "Success"
+            "description": "Order not found"
           }
         }
       }
     },
-    "/api/orderdetails/{orderDetailId}": {
+    "/api/orders/customers/{id}": {
       "get": {
         "tags": [
-          "OrderDetail"
+          "Order"
         ],
+        "summary": "Get orders by a customerId",
+        "description": "Gets orders according to given customerId",
         "parameters": [
           {
-            "name": "orderDetailId",
+            "name": "id",
             "in": "path",
+            "description": "Related customerId",
             "required": true,
             "schema": {
               "type": "integer",
@@ -552,23 +494,32 @@
             "content": {
               "text/plain": {
                 "schema": {
-                  "$ref": "#/components/schemas/GetOrderDetailResponse"
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/OrderResponseDTO"
+                  }
                 }
               },
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/GetOrderDetailResponse"
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/OrderResponseDTO"
+                  }
                 }
               },
               "text/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/GetOrderDetailResponse"
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/OrderResponseDTO"
+                  }
                 }
               }
             }
           },
           "404": {
-            "description": "Not Found",
+            "description": "Orders not found",
             "content": {
               "text/plain": {
                 "schema": {
@@ -587,29 +538,11 @@
               }
             }
           },
-          "500": {
-            "description": "Server Error"
-          }
-        }
-      },
-      "delete": {
-        "tags": [
-          "OrderDetail"
-        ],
-        "parameters": [
-          {
-            "name": "orderDetailId",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "integer",
-              "format": "int32"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Success"
+          "400": {
+            "description": "Validation Error"
+          },
+          "401": {
+            "description": "Unauthorized"
           }
         }
       }
@@ -619,6 +552,8 @@
         "tags": [
           "Product"
         ],
+        "summary": "Get all products",
+        "description": "Gets all products",
         "responses": {
           "200": {
             "description": "Success",
@@ -627,7 +562,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/GetOrderDetailResponse"
+                    "$ref": "#/components/schemas/ProductResponse"
                   }
                 }
               },
@@ -635,7 +570,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/GetOrderDetailResponse"
+                    "$ref": "#/components/schemas/ProductResponse"
                   }
                 }
               },
@@ -643,14 +578,14 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/GetOrderDetailResponse"
+                    "$ref": "#/components/schemas/ProductResponse"
                   }
                 }
               }
             }
           },
           "404": {
-            "description": "Not Found",
+            "description": "Product not found",
             "content": {
               "text/plain": {
                 "schema": {
@@ -669,8 +604,11 @@
               }
             }
           },
-          "500": {
-            "description": "Server Error"
+          "400": {
+            "description": "Validation Error"
+          },
+          "401": {
+            "description": "Unauthorized"
           }
         }
       },
@@ -678,21 +616,23 @@
         "tags": [
           "Product"
         ],
+        "summary": "Create product",
+        "description": "Creates an product",
         "requestBody": {
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/CreateProductRequest"
+                "$ref": "#/components/schemas/ProductCreateRequest"
               }
             },
             "text/json": {
               "schema": {
-                "$ref": "#/components/schemas/CreateProductRequest"
+                "$ref": "#/components/schemas/ProductCreateRequest"
               }
             },
             "application/*+json": {
               "schema": {
-                "$ref": "#/components/schemas/CreateProductRequest"
+                "$ref": "#/components/schemas/ProductCreateRequest"
               }
             }
           }
@@ -700,6 +640,12 @@
         "responses": {
           "200": {
             "description": "Success"
+          },
+          "400": {
+            "description": "Validation Error"
+          },
+          "401": {
+            "description": "Unauthorized"
           }
         }
       },
@@ -707,21 +653,23 @@
         "tags": [
           "Product"
         ],
+        "summary": "Update product",
+        "description": "Updates an product",
         "requestBody": {
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/UpdateProductRequest"
+                "$ref": "#/components/schemas/ProductUpdateRequest"
               }
             },
             "text/json": {
               "schema": {
-                "$ref": "#/components/schemas/UpdateProductRequest"
+                "$ref": "#/components/schemas/ProductUpdateRequest"
               }
             },
             "application/*+json": {
               "schema": {
-                "$ref": "#/components/schemas/UpdateProductRequest"
+                "$ref": "#/components/schemas/ProductUpdateRequest"
               }
             }
           }
@@ -729,19 +677,31 @@
         "responses": {
           "200": {
             "description": "Success"
+          },
+          "400": {
+            "description": "Validation Error"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Product not found"
           }
         }
       }
     },
-    "/api/products/{productId}": {
+    "/api/products/{id}": {
       "get": {
         "tags": [
           "Product"
         ],
+        "summary": "Get product by Id",
+        "description": "Gets a product according to given productId",
         "parameters": [
           {
-            "name": "productId",
+            "name": "id",
             "in": "path",
+            "description": "Related productId",
             "required": true,
             "schema": {
               "type": "integer",
@@ -755,43 +715,32 @@
             "content": {
               "text/plain": {
                 "schema": {
-                  "$ref": "#/components/schemas/GetOrderDetailResponse"
+                  "$ref": "#/components/schemas/ProductResponse"
                 }
               },
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/GetOrderDetailResponse"
+                  "$ref": "#/components/schemas/ProductResponse"
                 }
               },
               "text/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/GetOrderDetailResponse"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Not Found",
-            "content": {
-              "text/plain": {
-                "schema": {
-                  "$ref": "#/components/schemas/ProblemDetails"
-                }
-              },
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ProblemDetails"
-                }
-              },
-              "text/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ProblemDetails"
+                  "$ref": "#/components/schemas/ProductResponse"
                 }
               }
             }
           },
           "500": {
             "description": "Server Error"
+          },
+          "400": {
+            "description": "Validation Error"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Product not found"
           }
         }
       },
@@ -799,20 +748,30 @@
         "tags": [
           "Product"
         ],
+        "summary": "Delete product",
+        "description": "Deletes a product",
         "parameters": [
           {
-            "name": "productId",
+            "name": "id",
             "in": "path",
             "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "string"
             }
           }
         ],
         "responses": {
           "200": {
             "description": "Success"
+          },
+          "400": {
+            "description": "Validation Error"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Product not found"
           }
         }
       }
@@ -820,9 +779,73 @@
   },
   "components": {
     "schemas": {
-      "CreateCustomerRequest": {
+      "CustomerCreateRequest": {
         "type": "object",
         "properties": {
+          "Name": {
+            "type": "string",
+            "nullable": true
+          },
+          "Surname": {
+            "type": "string",
+            "nullable": true
+          },
+          "Email": {
+            "type": "string",
+            "nullable": true
+          },
+          "Password": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "CustomerResponse": {
+        "type": "object",
+        "properties": {
+          "ID": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "Name": {
+            "type": "string",
+            "nullable": true
+          },
+          "Surname": {
+            "type": "string",
+            "nullable": true
+          },
+          "Email": {
+            "type": "string",
+            "nullable": true
+          },
+          "Password": {
+            "type": "string",
+            "nullable": true
+          },
+          "Status": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "CreatedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "UpdatedAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "additionalProperties": false
+      },
+      "CustomerUpdateRequest": {
+        "type": "object",
+        "properties": {
+          "ID": {
+            "type": "integer",
+            "format": "int32"
+          },
           "Name": {
             "type": "string",
             "nullable": true
@@ -846,9 +869,135 @@
         },
         "additionalProperties": false
       },
-      "CreateOrderDTO": {
+      "OrderCreateRequest": {
         "type": "object",
         "properties": {
+          "Order": {
+            "$ref": "#/components/schemas/OrderCreateRequestDTO"
+          },
+          "OrderDetails": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/OrderCreateRequestDetailDTO"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "OrderCreateRequestDetailDTO": {
+        "type": "object",
+        "properties": {
+          "ProductId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "Count": {
+            "type": "integer",
+            "format": "int32"
+          }
+        },
+        "additionalProperties": false
+      },
+      "OrderCreateRequestDTO": {
+        "type": "object",
+        "properties": {
+          "CustomerId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "PurchasedDate": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "additionalProperties": false
+      },
+      "OrderDetailResponseDTO": {
+        "type": "object",
+        "properties": {
+          "ID": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "OrderId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "Product": {
+            "$ref": "#/components/schemas/ProductResponse"
+          },
+          "Count": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "CreatedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "UpdatedAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "additionalProperties": false
+      },
+      "OrderResponse": {
+        "type": "object",
+        "properties": {
+          "Order": {
+            "$ref": "#/components/schemas/OrderResponseDTO"
+          },
+          "OrderDetails": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/OrderDetailResponseDTO"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "OrderResponseDTO": {
+        "type": "object",
+        "properties": {
+          "ID": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "Customer": {
+            "$ref": "#/components/schemas/CustomerResponse"
+          },
+          "TotalAmount": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "Status": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "PurchasedDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "CreatedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "UpdatedAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "additionalProperties": false
+      },
+      "OrderUpdateRequest": {
+        "type": "object",
+        "properties": {
+          "ID": {
+            "type": "integer",
+            "format": "int32"
+          },
           "CustomerId": {
             "type": "integer",
             "format": "int32"
@@ -862,244 +1011,6 @@
             "format": "int32"
           },
           "PurchasedDate": {
-            "type": "string",
-            "format": "date-time"
-          }
-        },
-        "additionalProperties": false
-      },
-      "CreateOrderDetailDTO": {
-        "type": "object",
-        "properties": {
-          "OrderId": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "ProductId": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "Count": {
-            "type": "integer",
-            "format": "int32"
-          }
-        },
-        "additionalProperties": false
-      },
-      "CreateOrderDetailRequest": {
-        "type": "object",
-        "properties": {
-          "OrderId": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "ProductId": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "Count": {
-            "type": "integer",
-            "format": "int32"
-          }
-        },
-        "additionalProperties": false
-      },
-      "CreateOrderRequest": {
-        "type": "object",
-        "properties": {
-          "Order": {
-            "$ref": "#/components/schemas/CreateOrderDTO"
-          },
-          "OrderDetails": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/CreateOrderDetailDTO"
-            },
-            "nullable": true
-          }
-        },
-        "additionalProperties": false
-      },
-      "CreateProductRequest": {
-        "type": "object",
-        "properties": {
-          "Name": {
-            "type": "string",
-            "nullable": true
-          },
-          "Price": {
-            "type": "number",
-            "format": "double"
-          }
-        },
-        "additionalProperties": false
-      },
-      "GetCustomerResponse": {
-        "type": "object",
-        "properties": {
-          "Id": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "Name": {
-            "type": "string",
-            "nullable": true
-          },
-          "Surname": {
-            "type": "string",
-            "nullable": true
-          },
-          "Email": {
-            "type": "string",
-            "nullable": true
-          },
-          "Password": {
-            "type": "string",
-            "nullable": true
-          },
-          "Status": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "CreatedAt": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "UpdatedAt": {
-            "type": "string",
-            "format": "date-time"
-          }
-        },
-        "additionalProperties": false
-      },
-      "GetOrderDTO": {
-        "type": "object",
-        "properties": {
-          "Id": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "Customer": {
-            "$ref": "#/components/schemas/GetCustomerResponse"
-          },
-          "TotalAmount": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "Status": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "PurchasedDate": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "CreatedAt": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "UpdatedAt": {
-            "type": "string",
-            "format": "date-time"
-          }
-        },
-        "additionalProperties": false
-      },
-      "GetOrderDetailDTO": {
-        "type": "object",
-        "properties": {
-          "Id": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "OrderId": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "Product": {
-            "$ref": "#/components/schemas/GetProductResponse"
-          },
-          "Count": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "CreatedAt": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "UpdatedAt": {
-            "type": "string",
-            "format": "date-time"
-          }
-        },
-        "additionalProperties": false
-      },
-      "GetOrderDetailResponse": {
-        "type": "object",
-        "properties": {
-          "Id": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "OrderId": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "ProductId": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "Count": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "CreatedAt": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "UpdatedAt": {
-            "type": "string",
-            "format": "date-time"
-          }
-        },
-        "additionalProperties": false
-      },
-      "GetOrderResponse": {
-        "type": "object",
-        "properties": {
-          "Order": {
-            "$ref": "#/components/schemas/GetOrderDTO"
-          },
-          "OrderDetails": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/GetOrderDetailDTO"
-            },
-            "nullable": true
-          }
-        },
-        "additionalProperties": false
-      },
-      "GetProductResponse": {
-        "type": "object",
-        "properties": {
-          "Id": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "Name": {
-            "type": "string",
-            "nullable": true
-          },
-          "Price": {
-            "type": "number",
-            "format": "double"
-          },
-          "CreatedAt": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "UpdatedAt": {
             "type": "string",
             "format": "date-time"
           }
@@ -1133,85 +1044,21 @@
         },
         "additionalProperties": { }
       },
-      "UpdateCustomerRequest": {
+      "ProductCreateRequest": {
         "type": "object",
         "properties": {
-          "ID": {
-            "type": "integer",
-            "format": "int32"
-          },
           "Name": {
             "type": "string",
             "nullable": true
           },
-          "Surname": {
-            "type": "string",
-            "nullable": true
-          },
-          "Email": {
-            "type": "string",
-            "nullable": true
-          },
-          "Password": {
-            "type": "string",
-            "nullable": true
-          },
-          "Status": {
+          "Price": {
             "type": "integer",
             "format": "int32"
           }
         },
         "additionalProperties": false
       },
-      "UpdateOrderDetailRequest": {
-        "type": "object",
-        "properties": {
-          "ID": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "OrderId": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "ProductId": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "Count": {
-            "type": "integer",
-            "format": "int32"
-          }
-        },
-        "additionalProperties": false
-      },
-      "UpdateOrderRequest": {
-        "type": "object",
-        "properties": {
-          "ID": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "CustomerId": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "TotalAmount": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "Status": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "PurchasedDate": {
-            "type": "string",
-            "format": "date-time"
-          }
-        },
-        "additionalProperties": false
-      },
-      "UpdateProductRequest": {
+      "ProductResponse": {
         "type": "object",
         "properties": {
           "ID": {
@@ -1223,8 +1070,34 @@
             "nullable": true
           },
           "Price": {
-            "type": "number",
-            "format": "double"
+            "type": "integer",
+            "format": "int32"
+          },
+          "CreatedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "UpdatedAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "additionalProperties": false
+      },
+      "ProductUpdateRequest": {
+        "type": "object",
+        "properties": {
+          "ID": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "Name": {
+            "type": "string",
+            "nullable": true
+          },
+          "Price": {
+            "type": "integer",
+            "format": "int32"
           }
         },
         "additionalProperties": false

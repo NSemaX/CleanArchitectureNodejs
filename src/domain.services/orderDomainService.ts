@@ -5,6 +5,7 @@ import { Types } from "../infrastructure/utility/DiTypes";
 import { IProductRepository } from "../domain/models/product/IProductRepository";
 import { IOrderRepository } from "../domain/aggregates/orderAggregate/IOrderRepository";
 import { IOrderDetailRepository } from "../domain/aggregates/orderAggregate/IOrderDetailRepository";
+import Helpers from "../infrastructure/utility/Helpers";
 
 export interface IOrderDomainService {
   isOrderReachedtheMaxProductCountInADay: (Id: number) => Promise<boolean>;
@@ -45,7 +46,7 @@ export class OrderDomainService implements IOrderDomainService {
       let repeaters = Helpers.findRepeaterCountInArray(customerProducts);
       let greater = 0;
       const maxOrderableProductCountInADay = 5;
-      repeaters.forEach((num) => { if (num > maxOrderableProductCountInADay) greater++; });
+      repeaters.forEach((num: number) => { if (num > maxOrderableProductCountInADay) greater++; });
       if(greater > 0)
           result=true;
       return result;

@@ -15,3 +15,4 @@ class Helpers {
         return repeaters;
       };
 }
+  export default Helpers
