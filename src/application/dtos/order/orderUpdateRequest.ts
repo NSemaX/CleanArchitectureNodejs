@@ -1,6 +1,6 @@
-export class orderUpdateRequest {
+export class OrderUpdateRequest {
     CustomerId: number;
     Status: number;
     PurchasedDate: Date;
   }
-    export default orderUpdateRequest
+    export default OrderUpdateRequest

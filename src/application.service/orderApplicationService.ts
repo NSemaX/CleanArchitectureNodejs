@@ -2,11 +2,11 @@ import { inject, injectable } from "inversify";
 import  { OrderInput, OrderOutput } from "../domain/aggregates/orderAggregate/order";
 import { Types } from "../infrastructure/utility/DiTypes";
 import { OrderDetailOutput } from "../domain/aggregates/orderAggregate/orderDetail";
-import orderRequest from "../application/dtos/order/orderCreateRequest";
+import OrderCreateRequest from "../application/dtos/order/orderCreateRequest";
 import { IOrderDomainService } from "../domain.services/orderDomainService";
 import { IProductRepository } from "../domain/models/product/IProductRepository";
 import { ICustomerRepository } from "../domain/models/customer/ICustomerRepository";
-import { orderUpdateRequest } from "../application/dtos/order/orderUpdateRequest";
+import { OrderUpdateRequest } from "../application/dtos/order/orderUpdateRequest";
 import { IOrderDetailRepository } from "../domain/aggregates/orderAggregate/IOrderDetailRepository";
 import { IOrderRepository } from "../domain/aggregates/orderAggregate/IOrderRepository";
 import { OrderStatus } from "../domain/aggregates/orderAggregate/OrderStatus";
@@ -16,7 +16,7 @@ export interface IOrderApplicationService {
   getAllOrders: () => Promise<Array<OrderOutput>>;
   getOrderById: (Id: number) => Promise<orderResponse>;
   getOrderByCustomerId: (Id: number) => Promise<Array<orderResponse>>;
-  createOrder: (orderAggregateRequest: orderRequest) => Promise<any>;
+  createOrder: (orderAggregateRequest: OrderCreateRequest) => Promise<any>;
   updateOrder: (Id: number, order: OrderInput) => Promise<number>;
   deleteOrder: (Id: number) => Promise<boolean>;
 }
@@ -75,7 +75,7 @@ export class OrderApplicationService implements IOrderApplicationService {
     }
   };
 
-  createOrder = async (orderRequest: orderRequest): Promise<any> => {
+  createOrder = async (orderRequest: OrderCreateRequest): Promise<any> => {
     try {
       let isReachedMaxProductInADay = await this.orderDomainService.isOrderReachedtheMaxProductCountInADay(orderRequest.Order.CustomerId);
       
@@ -100,7 +100,7 @@ export class OrderApplicationService implements IOrderApplicationService {
     }
   };
 
-  updateOrder = async (Id: number, order: orderUpdateRequest): Promise<number> => {
+  updateOrder = async (Id: number, order: OrderUpdateRequest): Promise<number> => {
     try {
       return this.orderRepository.update(Id, order);
     } catch {

@@ -1,15 +1,15 @@
-import { CustomerOutput } from "../../../domain/models/customer/customer";
-import { ProductOutput } from "../../../domain/models/product/product";
+import { CustomerResponse } from "../customer/customerResponse";
+import { ProductResponse } from "../product/productResponse";
 
 
-export class orderResponse {
+export class OrderResponse {
     Order: OrderResponseDTO;
     OrderDetails:Array<OrderDetailResponseDTO>;
   }
 
   export class OrderResponseDTO {
     ID: number;
-    Customer: CustomerOutput;
+    Customer: CustomerResponse;
     TotalAmount: number;
     Status: number;
     PurchasedDate: Date;
@@ -20,9 +20,9 @@ export class orderResponse {
   export class OrderDetailResponseDTO {
     ID: number;
     OrderId: number;
-    Product: ProductOutput;
+    Product: ProductResponse;
     Count: number;
     CreatedDate: Date;
     UpdatedDate: Date;
   }
-  export default orderResponse
+  export default OrderResponse

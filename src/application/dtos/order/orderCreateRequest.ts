@@ -1,5 +1,5 @@
 
-export class orderCreateRequest  {
+export class OrderCreateRequest  {
   Order: OrderCreateRequestDTO;
   OrderDetails:Array<OrderCreateRequestDetailDTO>;
   }
@@ -12,4 +12,4 @@ export class orderCreateRequest  {
     ProductId: number;
     Count: number;
   }
-  export default orderCreateRequest
+  export default OrderCreateRequest
