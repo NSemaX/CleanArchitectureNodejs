@@ -14,9 +14,4 @@ class Helpers {
     }, {}) // empty object is the initial value for result object
   }
 }
-
-/*export class grouppedOrderDetailItems {
-  [key: string]: OrderDetailOutput[];
-
-}*/
 export default Helpers;

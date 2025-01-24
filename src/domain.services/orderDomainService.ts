@@ -1,6 +1,6 @@
 import { inject, injectable } from "inversify";
 import { OrderOutput } from "../domain/aggregates/orderAggregate/order";
-import OrderDetail, { OrderDetailOutput } from "../domain/aggregates/orderAggregate/orderDetail";
+import { OrderDetailOutput } from "../domain/aggregates/orderAggregate/orderDetail";
 import { Types } from "../infrastructure/utility/DiTypes";
 import { IProductRepository } from "../domain/models/product/IProductRepository";
 import { IOrderRepository } from "../domain/aggregates/orderAggregate/IOrderRepository";
@@ -44,7 +44,7 @@ export class OrderDomainService implements IOrderDomainService {
       }
 
       var groupedOrderDetails = Helpers.groupBy(allOrderDetails,"ProductId");
-      let grouppedOrderDetailItems: OrderDetailOutput[]=new Array<OrderDetail>;
+      let grouppedOrderDetailItems: OrderDetailOutput[]=new Array<OrderDetailOutput>;
 
 
     for (let [key, value] of Object.entries(groupedOrderDetails)) {
@@ -69,13 +69,6 @@ export class OrderDomainService implements IOrderDomainService {
       throw new Error("Unable to create order");
     }
   };
-
-
-
-}
-
-export class grouppedOrderDetailItems {
-  [key: string]: OrderDetailOutput[];
 
 }
 
