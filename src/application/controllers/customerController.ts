@@ -2,7 +2,6 @@ import { Request, Response } from "express";
 import { inject, injectable } from "inversify";
 import { StatusCode } from "../../infrastructure/utility/statusCodes";
 import { Types } from "../../infrastructure/utility/DiTypes";
-import { CustomerInput } from "../../domain/models/customer/customer";
 import { ICustomerApplicationService } from "../../application.service/customerApplicationService";
 import CustomerCreateRequest from "../dtos/customer/customerCreateRequest";
 import { CustomerUpdateRequest } from "../dtos/customer/customerUpdateRequest";

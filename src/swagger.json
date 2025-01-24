@@ -2,7 +2,7 @@
   "openapi": "3.0.1",
   "info": {
     "title": "NSShop API",
-    "description": "This is a Clean Architercture applied Node.js - Typescript API",
+    "description": "This is Node.js - Typescript API with Clean Architecture implemented",
     "contact": {
       "name": "Nagihan Sema KUDU",
       "url": "http://www.semakudu.com/",

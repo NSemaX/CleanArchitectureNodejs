@@ -1,6 +1,6 @@
 import { inject, injectable } from "inversify";
-import {OrderOutput} from "../domain/aggregates/orderAggregate/order";
-import {OrderDetailOutput} from "../domain/aggregates/orderAggregate/orderDetail";
+import { OrderOutput } from "../domain/aggregates/orderAggregate/order";
+import OrderDetail, { OrderDetailOutput } from "../domain/aggregates/orderAggregate/orderDetail";
 import { Types } from "../infrastructure/utility/DiTypes";
 import { IProductRepository } from "../domain/models/product/IProductRepository";
 import { IOrderRepository } from "../domain/aggregates/orderAggregate/IOrderRepository";
@@ -31,27 +31,51 @@ export class OrderDomainService implements IOrderDomainService {
         (item) => today.toDateString() === item.PurchasedDate.toDateString()
       );
 
-      let customerProducts = [];
+      let customerProducts: number []=new Array<number>;
+      let allOrderDetails: OrderDetailOutput[]=new Array<OrderDetailOutput>;
       for (const orderItem of orderItemsFiltered) {
         let orderDetails: OrderDetailOutput[] = await this.OrderDetailRepository.getByOrderId(orderItem.ID);
         if (Array.isArray(orderDetails))
+        {
           for (const orderDetailItem of orderDetails) {
-            let product = await this.ProductRepository.getById(
-              orderDetailItem.ProductId
-            );
-            customerProducts.push(product.ID);
-          }        
+            allOrderDetails.push(orderDetailItem);
+          }         
+        }
       }
 
-      let repeaters = Helpers.findRepeaterCountInArray(customerProducts);
+      var groupedOrderDetails = Helpers.groupBy(allOrderDetails,"ProductId");
+      let grouppedOrderDetailItems: OrderDetailOutput[]=new Array<OrderDetail>;
+
+
+    for (let [key, value] of Object.entries(groupedOrderDetails)) {
+      console.log(key + ": " + value); 
+      grouppedOrderDetailItems =value;
+      let grouppedProductCount:number=0;
+      grouppedOrderDetailItems.forEach((orderDetail) => {              
+        grouppedProductCount+=orderDetail.Count;             
+          });
+          customerProducts.push(grouppedProductCount);
+      }
+    
+      console.log(customerProducts);
+
       let greater = 0;
-      const maxOrderableProductCountInADay = 5;
-      repeaters.forEach((num: number) => { if (num > maxOrderableProductCountInADay) greater++; });
-      if(greater > 0)
-          result=true;
+      const maxOrderableProductCountInADay = 2;
+      customerProducts.forEach((num: number) => { if (num > maxOrderableProductCountInADay) greater++; });
+      if (greater > 0)
+        result = true;
       return result;
     } catch (ex) {
       throw new Error("Unable to create order");
     }
   };
+
+
+
 }
+
+export class grouppedOrderDetailItems {
+  [key: string]: OrderDetailOutput[];
+
+}
+

@@ -1,18 +1,22 @@
+import { OrderDetailOutput } from "../../domain/aggregates/orderAggregate/orderDetail";
+
 class Helpers {
-    public static findRepeaterCountInArray = (elements: any[]): any[] => {
-        let repeaters: number[] = [];
-      
-        for (let i = 0; i < elements.length; i++) {
-            let repeaterCount=0;
-          for (let j = i + 1; j < elements.length; j++) {
-            if (elements[i] === elements[j])  {
-                repeaterCount++;
-                repeaters.push(repeaterCount);             
-            }
-          }
-        }
-        console.log(repeaters);      
-        return repeaters;
-      };
+
+  public static groupBy  = (array: any[], key: any): any[] => {
+    // Return the end result
+    return array.reduce((result, currentValue) => {
+      // If an array already present for key, push it to the array. Else create an array and push the object
+      ;(result[currentValue[key]] = result[currentValue[key]] || []).push(
+        currentValue,
+      )
+      // Return the current iteration `result` value, this will be taken as next iteration `result` value and accumulate
+      return result
+    }, {}) // empty object is the initial value for result object
+  }
 }
-  export default Helpers
+
+/*export class grouppedOrderDetailItems {
+  [key: string]: OrderDetailOutput[];
+
+}*/
+export default Helpers;

@@ -4,7 +4,6 @@ import { StatusCode } from "../../infrastructure/utility/statusCodes";
 import { Types } from "../../infrastructure/utility/DiTypes";
 import { OrderCreateRequest } from "../dtos/order/orderCreateRequest";
 import { IOrderApplicationService } from "../../application.service/orderApplicationService";
-import { OrderInput } from "../../domain/aggregates/orderAggregate/order";
 import OrderUpdateRequest from "../dtos/order/orderUpdateRequest";
 
 
