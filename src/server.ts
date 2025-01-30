@@ -1,4 +1,4 @@
-import express, {Express, Request, Response,Application} from 'express';
+import express, {Express, Request, Response} from 'express';
 import SequelizeConnection from './infrastructure/db/SequelizeConnection'
 import { db } from "./domain/models/index";
 import "reflect-metadata";
@@ -6,9 +6,10 @@ import { applicationRoutes } from './application/routes';
 import swaggerUi from "swagger-ui-express";
 import swaggerOutput from "./swagger.json";
 import { exceptionHandler } from './application/middlewares/errorHandling/errorHandlerMiddleware';
+import { vars } from './infrastructure/config/vars';
 
 const app: Express = express();
-const port = 3000;
+const port = vars.port;
 
 (async () => {
     await SequelizeConnection.connect();
@@ -23,7 +24,7 @@ const port = 3000;
 
   
 app.get('/', (req: Request, res: Response)=>{
-    res.send('Hello, this is Express + TypeScript');
+    res.send(`Hello, this is Express + TypeScript. To access API Swagger go to http://localhost:${port}/docs`);
 });
 
 app.use(express.json());

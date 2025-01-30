@@ -1,5 +1,4 @@
-import { Op } from 'sequelize'
-import { inject, injectable } from "inversify";
+import { injectable } from "inversify";
 import "reflect-metadata";
 import Customer, { CustomerInput, CustomerOutput } from '../../domain/models/customer/customer'
 import { HttpStatusCode } from '../../application/middlewares/errorHandling/HttpStatusCodeEnums';

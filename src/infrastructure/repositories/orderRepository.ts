@@ -1,5 +1,4 @@
-import { Op } from 'sequelize'
-import { inject, injectable } from "inversify";
+import { injectable } from "inversify";
 import "reflect-metadata";
 import Order, { OrderInput, OrderOutput } from '../../domain/aggregates/orderAggregate/order'
 import { IOrderRepository } from '../../domain/aggregates/orderAggregate/IOrderRepository';

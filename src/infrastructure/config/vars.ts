@@ -12,5 +12,6 @@ export const vars = {
     dbMaxPoolSize: Number(process.env.MAX_DB_POOL_SIZE) || 30,
     dbPoolAcquireTimeout: Number(process.env.DB_ACQUIRE_TIMEOUT) || 60000,
     dbPoolIdleConnectionTime: Number(process.env.DB_POOL_IDLE_CONNECTION_TIME) || 30000,
-    dbLogging: process.env.DB_LOGGING === 'true'
+    dbLogging: process.env.DB_LOGGING === 'true',
+    maxOrderableProductCountInADay: Number(process.env.MAX_ORDERABLE_PRODUCT_COUNT_IN_A_DAY) || 10,
   };

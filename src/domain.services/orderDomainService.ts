@@ -6,6 +6,7 @@ import { IProductRepository } from "../domain/models/product/IProductRepository"
 import { IOrderRepository } from "../domain/aggregates/orderAggregate/IOrderRepository";
 import { IOrderDetailRepository } from "../domain/aggregates/orderAggregate/IOrderDetailRepository";
 import Helpers from "../infrastructure/utility/Helpers";
+import { vars } from "../infrastructure/config/vars";
 
 export interface IOrderDomainService {
   isOrderReachedtheMaxProductCountInADay: (Id: number) => Promise<boolean>;
@@ -60,7 +61,7 @@ export class OrderDomainService implements IOrderDomainService {
       console.log(customerProducts);
 
       let greater = 0;
-      const maxOrderableProductCountInADay = 2;
+      const maxOrderableProductCountInADay = vars.maxOrderableProductCountInADay;
       customerProducts.forEach((num: number) => { if (num > maxOrderableProductCountInADay) greater++; });
       if (greater > 0)
         result = true;

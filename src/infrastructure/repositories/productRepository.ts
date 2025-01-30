@@ -1,5 +1,4 @@
-import { Op } from 'sequelize'
-import { inject, injectable } from "inversify";
+import { injectable } from "inversify";
 import "reflect-metadata";
 import Product, { ProductInput, ProductOutput } from '../../domain/models/product/product'
 import { IProductRepository } from '../../domain/models/product/IProductRepository';
