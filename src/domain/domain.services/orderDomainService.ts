@@ -1,12 +1,13 @@
 import { inject, injectable } from "inversify";
-import { OrderOutput } from "../domain/aggregates/orderAggregate/order";
-import { OrderDetailOutput } from "../domain/aggregates/orderAggregate/orderDetail";
-import { Types } from "../infrastructure/utility/DiTypes";
-import { IProductRepository } from "../domain/models/product/IProductRepository";
-import { IOrderRepository } from "../domain/aggregates/orderAggregate/IOrderRepository";
-import { IOrderDetailRepository } from "../domain/aggregates/orderAggregate/IOrderDetailRepository";
-import Helpers from "../infrastructure/utility/Helpers";
-import { vars } from "../infrastructure/config/vars";
+import { Types } from "../../infrastructure/utility/DiTypes";
+import { IOrderRepository } from "../aggregates/orderAggregate/IOrderRepository";
+import { IOrderDetailRepository } from "../aggregates/orderAggregate/IOrderDetailRepository";
+import { OrderOutput } from "../aggregates/orderAggregate/order";
+import { IProductRepository } from "../models/product/IProductRepository";
+import { OrderDetailOutput } from "../aggregates/orderAggregate/orderDetail";
+import Helpers from "../../infrastructure/utility/Helpers";
+import { vars } from "../../infrastructure/config/vars";
+
 
 export interface IOrderDomainService {
   isOrderReachedtheMaxProductCountInADay: (Id: number) => Promise<boolean>;

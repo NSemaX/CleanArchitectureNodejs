@@ -1,10 +1,10 @@
 import { injectable } from "inversify";
 import "reflect-metadata";
 import Customer, { CustomerInput, CustomerOutput } from '../../domain/models/customer/customer'
-import { HttpStatusCode } from '../../application/middlewares/errorHandling/HttpStatusCodeEnums';
-import { APIError } from '../../application/middlewares/errorHandling/BaseError';
-import { NotFoundException } from '../../application/middlewares/errorHandling/APIExceptions';
-import { errorMessages } from '../../application/middlewares/errorHandling/errorMessages';
+import { HttpStatusCode } from '../../api/middlewares/errorHandling/HttpStatusCodeEnums';
+import { APIError } from '../../api/middlewares/errorHandling/BaseError';
+import { NotFoundException } from '../../api/middlewares/errorHandling/APIExceptions';
+import { errorMessages } from '../../api/middlewares/errorHandling/errorMessages';
 import { ICustomerRepository } from '../../domain/models/customer/ICustomerRepository';
 
 @injectable()

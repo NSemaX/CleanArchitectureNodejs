@@ -2,11 +2,11 @@ import express, {Express, Request, Response} from 'express';
 import SequelizeConnection from './infrastructure/db/SequelizeConnection'
 import { db } from "./domain/models/index";
 import "reflect-metadata";
-import { applicationRoutes } from './application/routes';
 import swaggerUi from "swagger-ui-express";
 import swaggerOutput from "./swagger.json";
-import { exceptionHandler } from './application/middlewares/errorHandling/errorHandlerMiddleware';
+import { exceptionHandler } from './api/middlewares/errorHandling/errorHandlerMiddleware';
 import { vars } from './infrastructure/config/vars';
+import { applicationRoutes } from './api/routes';
 
 const app: Express = express();
 const port = vars.port;

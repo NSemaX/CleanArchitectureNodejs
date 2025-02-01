@@ -1,16 +1,16 @@
 import { inject, injectable } from "inversify";
-import { OrderInput, OrderOutput } from "../domain/aggregates/orderAggregate/order";
-import { Types } from "../infrastructure/utility/DiTypes";
-import { OrderDetailInput, OrderDetailOutput } from "../domain/aggregates/orderAggregate/orderDetail";
-import OrderCreateRequest from "../application/dtos/order/orderCreateRequest";
-import { IOrderDomainService } from "../domain.services/orderDomainService";
-import { IProductRepository } from "../domain/models/product/IProductRepository";
-import { ICustomerRepository } from "../domain/models/customer/ICustomerRepository";
-import { OrderUpdateRequest } from "../application/dtos/order/orderUpdateRequest";
-import { IOrderDetailRepository } from "../domain/aggregates/orderAggregate/IOrderDetailRepository";
-import { IOrderRepository } from "../domain/aggregates/orderAggregate/IOrderRepository";
-import { OrderStatus } from "../domain/aggregates/orderAggregate/OrderStatus";
-import orderResponse, { OrderDetailResponseDTO, OrderResponseDTO } from "../application/dtos/order/orderResponse";
+import { OrderInput, OrderOutput } from "../../domain/aggregates/orderAggregate/order";
+import orderResponse, { OrderDetailResponseDTO, OrderResponseDTO } from "../dtos/order/orderResponse";
+import OrderCreateRequest from "../dtos/order/orderCreateRequest";
+import OrderUpdateRequest from "../dtos/order/orderUpdateRequest";
+import { IOrderDomainService } from "../../domain/domain.services/orderDomainService";
+import { IOrderRepository } from "../../domain/aggregates/orderAggregate/IOrderRepository";
+import { IOrderDetailRepository } from "../../domain/aggregates/orderAggregate/IOrderDetailRepository";
+import { IProductRepository } from "../../domain/models/product/IProductRepository";
+import { ICustomerRepository } from "../../domain/models/customer/ICustomerRepository";
+import { Types } from "../../infrastructure/utility/DiTypes";
+import { OrderDetailInput, OrderDetailOutput } from "../../domain/aggregates/orderAggregate/orderDetail";
+import { OrderStatus } from "../../domain/aggregates/orderAggregate/OrderStatus";
 
 export interface IOrderApplicationService {
   getAllOrders: () => Promise<Array<OrderOutput>>;

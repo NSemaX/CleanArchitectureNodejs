@@ -1,12 +1,13 @@
 import { inject, injectable } from "inversify";
-import { Types } from "../infrastructure/utility/DiTypes";
-import { ICustomerDomainService } from "../domain.services/customerDomainService";
-import { ICustomerRepository } from "../domain/models/customer/ICustomerRepository";
-import { CustomerResponse } from "../application/dtos/customer/customerResponse";
-import CustomerCreateRequest from "../application/dtos/customer/customerCreateRequest";
-import { CustomerUpdateRequest } from "../application/dtos/customer/customerUpdateRequest";
-import { CustomerInput } from "../domain/models/customer/customer";
-import { CustomerStatus } from "../domain/models/customer/customerStatus";
+import { CustomerResponse } from "../dtos/customer/customerResponse";
+import CustomerCreateRequest from "../dtos/customer/customerCreateRequest";
+import { CustomerUpdateRequest } from "../dtos/customer/customerUpdateRequest";
+import { ICustomerRepository } from "../../domain/models/customer/ICustomerRepository";
+import { ICustomerDomainService } from "../../domain/domain.services/customerDomainService";
+import { Types } from "../../infrastructure/utility/DiTypes";
+import { CustomerInput } from "../../domain/models/customer/customer";
+import { CustomerStatus } from "../../domain/models/customer/customerStatus";
+
 
 export interface ICustomerApplicationService {
 

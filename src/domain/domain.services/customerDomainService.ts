@@ -1,7 +1,7 @@
 import { inject, injectable } from "inversify";
-import { Types } from "../infrastructure/utility/DiTypes";
-import { ICustomerRepository } from "../domain/models/customer/ICustomerRepository";
-import { CustomerInput } from "../domain/models/customer/customer";
+import { CustomerInput } from "../models/customer/customer";
+import { ICustomerRepository } from "../models/customer/ICustomerRepository";
+import { Types } from "../../infrastructure/utility/DiTypes";
 
 
 export interface ICustomerDomainService {

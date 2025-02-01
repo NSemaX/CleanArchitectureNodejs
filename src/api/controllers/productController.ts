@@ -2,8 +2,8 @@ import { Request, Response } from "express";
 import { inject, injectable } from "inversify";
 import { StatusCode } from "../../infrastructure/utility/statusCodes";
 import { Types } from "../../infrastructure/utility/DiTypes";
-import { IProductApplicationService } from "../../application.service/productApplicationService";
-import { ProductRequest } from "../dtos/product/productRequest";
+import { ProductRequest } from "../../application/dtos/product/productRequest";
+import { IProductApplicationService } from "../../application/application.service/productApplicationService";
 
 
 export interface IProductController {
