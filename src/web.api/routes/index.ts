@@ -1,5 +1,5 @@
 import express from 'express';
-import orderRoutes from "../routes/orderRoutes";
+import orderRoutes from "./orderRoutes";
 import productRoutes from './productRoutes';
 import customerRoutes from './customerRoutes';
 

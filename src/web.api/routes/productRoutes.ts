@@ -1,7 +1,7 @@
 import express from "express";
 import { Types } from "../../infrastructure/utility/DiTypes";
 import { dIContainer } from "../../inversify.config";
-import { IProductController } from "../../api/controllers/productController";
+import { IProductController } from "../controllers/productController";
 
 class ProductRoutes {
   router = express.Router();

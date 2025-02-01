@@ -4,9 +4,9 @@ import { db } from "./domain/models/index";
 import "reflect-metadata";
 import swaggerUi from "swagger-ui-express";
 import swaggerOutput from "./swagger.json";
-import { exceptionHandler } from './api/middlewares/errorHandling/errorHandlerMiddleware';
+import { exceptionHandler } from './web.api/middlewares/errorHandling/errorHandlerMiddleware';
 import { vars } from './infrastructure/config/vars';
-import { applicationRoutes } from './api/routes';
+import { applicationRoutes } from './web.api/routes';
 
 const app: Express = express();
 const port = vars.port;

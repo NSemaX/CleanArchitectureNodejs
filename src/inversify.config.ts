@@ -1,21 +1,21 @@
 import { Container } from "inversify";
 import { Types } from "./infrastructure/utility/DiTypes";
 import { OrderRepository,} from "./infrastructure/repositories/orderRepository";
-import { IOrderController,OrderController,} from "./api/controllers/orderController";
+import { IOrderController,OrderController,} from "./web.api/controllers/orderController";
 import { ProductRepository } from "./infrastructure/repositories/productRepository";
-import { IProductController,ProductController,} from "./api/controllers/productController";
+import { IProductController,ProductController,} from "./web.api/controllers/productController";
 import { OrderDetailRepository } from "./infrastructure/repositories/orderDetailRepository";
 import { CustomerRepository } from "./infrastructure/repositories/customerRepository";
-import { ICustomerController,CustomerController,} from "./api/controllers/customerController";
+import { ICustomerController,CustomerController,} from "./web.api/controllers/customerController";
 import { IOrderRepository } from "./domain/aggregates/orderAggregate/IOrderRepository";
 import { IProductRepository } from "./domain/models/product/IProductRepository";
 import { IOrderDetailRepository } from "./domain/aggregates/orderAggregate/IOrderDetailRepository";
 import { ICustomerRepository } from "./domain/models/customer/ICustomerRepository";
 import { IOrderDomainService, OrderDomainService } from "./domain/domain.services/orderDomainService";
-import { IOrderApplicationService, OrderApplicationService } from "./application/application.service/orderApplicationService";
-import { IProductApplicationService, ProductApplicationService } from "./application/application.service/productApplicationService";
+import { IOrderApplicationService, OrderApplicationService } from "./application/application.services/orderApplicationService";
+import { IProductApplicationService, ProductApplicationService } from "./application/application.services/productApplicationService";
 import { CustomerDomainService, ICustomerDomainService } from "./domain/domain.services/customerDomainService";
-import { CustomerApplicationService, ICustomerApplicationService } from "./application/application.service/customerApplicationService";
+import { CustomerApplicationService, ICustomerApplicationService } from "./application/application.services/customerApplicationService";
 
 
 const dIContainer = new Container();
