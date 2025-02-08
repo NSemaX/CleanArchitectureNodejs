@@ -1,11 +1,15 @@
 import { injectable } from "inversify";
 import "reflect-metadata";
-import Customer, { CustomerInput, CustomerOutput } from '../../domain/models/customer/customer'
+import  { CustomerInput, CustomerOutput } from '../../domain/models/customer/customer'
 import { HttpStatusCode } from '../../web.api/middlewares/errorHandling/HttpStatusCodeEnums';
 import { APIError } from '../../web.api/middlewares/errorHandling/BaseError';
 import { NotFoundException } from '../../web.api/middlewares/errorHandling/APIExceptions';
 import { errorMessages } from '../../web.api/middlewares/errorHandling/errorMessages';
 import { ICustomerRepository } from '../../domain/models/customer/ICustomerRepository';
+import { Customer } from "../db/dbModels";
+
+
+
 
 @injectable()
 export class CustomerRepository implements ICustomerRepository {

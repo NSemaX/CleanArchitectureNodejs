@@ -1,7 +1,8 @@
 import { injectable } from "inversify";
 import "reflect-metadata";
-import Order, { OrderInput, OrderOutput } from '../../domain/aggregates/orderAggregate/order'
+import  { OrderInput, OrderOutput } from '../../domain/aggregates/orderAggregate/order'
 import { IOrderRepository } from '../../domain/aggregates/orderAggregate/IOrderRepository';
+import Order from "../db/dbModels/orderDBModel";
 
 
 @injectable()

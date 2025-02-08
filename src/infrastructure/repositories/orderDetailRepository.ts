@@ -1,7 +1,8 @@
 import { injectable } from "inversify";
 import "reflect-metadata";
-import OrderDetail, { OrderDetailInput, OrderDetailOutput } from '../../domain/aggregates/orderAggregate/orderDetail'
+import  { OrderDetailInput, OrderDetailOutput } from '../../domain/aggregates/orderAggregate/orderDetail'
 import { IOrderDetailRepository } from '../../domain/aggregates/orderAggregate/IOrderDetailRepository';
+import OrderDetail from "../db/dbModels/orderDetailDBModel";
 
 @injectable()
 export class OrderDetailRepository implements IOrderDetailRepository {

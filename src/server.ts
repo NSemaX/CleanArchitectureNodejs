@@ -1,6 +1,6 @@
 import express, {Express, Request, Response} from 'express';
 import SequelizeConnection from './infrastructure/db/SequelizeConnection'
-import { db } from "./domain/models/index";
+import { db } from "./infrastructure/db/dbModels/index";
 import "reflect-metadata";
 import swaggerUi from "swagger-ui-express";
 import swaggerOutput from "./swagger.json";

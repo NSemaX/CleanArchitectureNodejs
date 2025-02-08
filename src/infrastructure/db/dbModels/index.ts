@@ -1,8 +1,9 @@
-import SequelizeConnection from "../../infrastructure/db/SequelizeConnection";
-import Customer from "./customer/customer";
-import Order from "../aggregates/orderAggregate/order";
-import OrderDetail from "../aggregates/orderAggregate/orderDetail";
-import Product from "./product/product";
+
+import Order from "./orderDBModel";
+import OrderDetail from "./orderDetailDBModel";
+import Product from "./productDBModel";
+import SequelizeConnection from "../SequelizeConnection";
+import Customer from "./customerDBModel";
 
 
 

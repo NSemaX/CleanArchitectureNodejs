@@ -1,7 +1,8 @@
 import { injectable } from "inversify";
 import "reflect-metadata";
-import Product, { ProductInput, ProductOutput } from '../../domain/models/product/product'
+import  { ProductInput, ProductOutput } from '../../domain/models/product/product'
 import { IProductRepository } from '../../domain/models/product/IProductRepository';
+import Product from "../db/dbModels/productDBModel";
 
 
 @injectable()
