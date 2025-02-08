@@ -11,10 +11,10 @@ export interface OrderDetailInput extends Optional<IOrderDetail, 'ID'> {}
 export interface OrderDetailOutput extends Required<IOrderDetail> {}
 
 class OrderDetail extends Model<IOrderDetail,OrderDetailInput> implements IOrderDetail {
-    public ID!: number
-    public OrderId!: number
-    public ProductId!: number
-    public Count!: number
+    public ID: number
+    public OrderId: number
+    public ProductId: number
+    public Count: number
 
     static initModel(sequelize: Sequelize): void {
         OrderDetail.init(
