@@ -5,8 +5,8 @@ import { CustomerUpdateRequest } from "../dtos/customer/customerUpdateRequest";
 import { ICustomerRepository } from "../../domain/models/customer/ICustomerRepository";
 import { ICustomerDomainService } from "../../domain/domain.services/customerDomainService";
 import { Types } from "../../infrastructure/utility/DiTypes";
-import { CustomerInput } from "../../domain/models/customer/customer";
 import { CustomerStatus } from "../../domain/models/customer/customerStatus";
+import { ICustomer } from "../../domain/models/customer/customer";
 
 
 export interface ICustomerApplicationService {
@@ -44,7 +44,7 @@ export class CustomerApplicationService implements ICustomerApplicationService {
 
   createCustomer = async (Customer: CustomerCreateRequest): Promise<any> => {
     try { 
-       let CustomerItem:CustomerInput={Name:Customer.Name, Surname:Customer.Surname,Email:Customer.Email,Password:Customer.Password,Status:CustomerStatus.Active};
+       let CustomerItem:ICustomer={Name:Customer.Name, Surname:Customer.Surname,Email:Customer.Email,Password:Customer.Password,Status:CustomerStatus.Active};
       return this.CustomerDomainService.createCustomer(CustomerItem);
     } catch (ex) {
       throw new Error("Unable to create Customer");

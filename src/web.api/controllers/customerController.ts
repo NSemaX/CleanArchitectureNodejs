@@ -62,8 +62,8 @@ export class CustomerController implements ICustomerController {
 
   public updateCustomer = async (req: Request, res: Response) => {
     try {
-      const { Name,Surname,Email,Password,Status } = req.body;
-      const customerUpdateRequest: CustomerUpdateRequest = {Name, Surname, Email, Password, Status}; 
+      const { ID,Name,Surname,Email,Password,Status } = req.body;
+      const customerUpdateRequest: CustomerUpdateRequest = {ID,Name, Surname, Email, Password, Status}; 
       const id= customerUpdateRequest.ID!;
       const updatedCustomerCount = await this.CustomerApplicationService.updateCustomer(id, customerUpdateRequest);
       res.status(StatusCode.SUCCESS).send();

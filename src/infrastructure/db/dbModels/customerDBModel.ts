@@ -1,8 +1,8 @@
 import { Model, Sequelize, DataTypes } from "sequelize";
-import { CustomerInput, ICustomer } from "../../../domain/models/customer/customer";
+import { ICustomer } from "../../../domain/models/customer/customer";
 
 
-class Customer extends Model<ICustomer,CustomerInput> implements ICustomer {
+class Customer extends Model<ICustomer> implements ICustomer {
     public ID!: number
     public Name!: string
     public Surname!: string

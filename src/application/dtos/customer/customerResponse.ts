@@ -1,3 +1,3 @@
-import { CustomerOutput } from "../../../domain/models/customer/customer";
+import { ICustomer } from "../../../domain/models/customer/customer";
 
-export interface CustomerResponse extends CustomerOutput{}
+export interface CustomerResponse extends ICustomer{}

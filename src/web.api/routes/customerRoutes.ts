@@ -24,7 +24,7 @@ class CustomerRoutes {
     this.router.post("/", this.CustomerController.createCustomer);
 
     // Update a Customer with id
-    this.router.put("/:id", this.CustomerController.updateCustomer);
+    this.router.put("/", this.CustomerController.updateCustomer);
 
     // Delete a Customer with id
     this.router.delete("/:id", this.CustomerController.deleteCustomer);

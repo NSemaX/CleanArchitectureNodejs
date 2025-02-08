@@ -1,10 +1,10 @@
-import { CustomerInput, CustomerOutput } from "./customer";
+import {  ICustomer } from "./customer";
 
 export interface ICustomerRepository {
-    getAll: () => Promise<Array<CustomerOutput>>;
-    getById: (id: number) => Promise<CustomerOutput>;
-    findByEmail: (email: string) => Promise<CustomerOutput>;
-    create: (Customer: CustomerInput) => Promise<any>;
-    update: (id: number, Customer: Partial<CustomerInput>) => Promise<number>;
+    getAll: () => Promise<Array<ICustomer>>;
+    getById: (id: number) => Promise<ICustomer>;
+    findByEmail: (email: string) => Promise<ICustomer>;
+    create: (Customer: ICustomer) => Promise<any>;
+    update: (id: number, Customer: Partial<ICustomer>) => Promise<number>;
     delete: (id: any) => Promise<boolean>;
 }

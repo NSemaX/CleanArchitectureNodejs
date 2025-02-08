@@ -1,7 +1,6 @@
-import { Optional } from "sequelize";
+import { IEntity } from "../entity";
 
-export interface ICustomer {
-    ID: number;
+export interface ICustomer extends IEntity {
     Name: string;
     Surname: string;
     Email: string;
@@ -9,7 +8,5 @@ export interface ICustomer {
     Status: number;
 }
 
-export interface CustomerInput extends Optional<ICustomer, 'ID'> {}
-export interface CustomerOutput extends Required<ICustomer> {}
 
 

@@ -1,6 +1,6 @@
 import { injectable } from "inversify";
 import "reflect-metadata";
-import  { CustomerInput, CustomerOutput } from '../../domain/models/customer/customer'
+import  {  ICustomer } from '../../domain/models/customer/customer'
 import { HttpStatusCode } from '../../web.api/middlewares/errorHandling/HttpStatusCodeEnums';
 import { APIError } from '../../web.api/middlewares/errorHandling/BaseError';
 import { NotFoundException } from '../../web.api/middlewares/errorHandling/APIExceptions';
@@ -14,7 +14,7 @@ import { Customer } from "../db/dbModels";
 @injectable()
 export class CustomerRepository implements ICustomerRepository {
 
-    getAll = async (): Promise<Array<CustomerOutput>> => {
+    getAll = async (): Promise<Array<ICustomer>> => {
         const items = Customer.findAll()
         if (!items || (await items).length==0) {
             //throw new APIError("customer error","empty customers",HttpStatusCode.NOT_FOUND);
@@ -23,7 +23,7 @@ export class CustomerRepository implements ICustomerRepository {
         return items
     }
 
-    getById = async (id: number): Promise<CustomerOutput> => {
+    getById = async (id: number): Promise<ICustomer> => {
         const item = await Customer.findByPk(id)
 
         if (!item) {
@@ -42,13 +42,13 @@ export class CustomerRepository implements ICustomerRepository {
         return item
     }
 
-    create = async (payload: CustomerInput): Promise<any> => {
+    create = async (payload: ICustomer): Promise<any> => {
         const item = await Customer.create(payload)
         return item.ID
     }
 
 
-    update = async (ID: number, payload: Partial<CustomerInput>): Promise<number> => {
+    update = async (ID: number, payload: Partial<ICustomer>): Promise<number> => {
         const item = await Customer.findByPk(ID)
 
         if (!item) {

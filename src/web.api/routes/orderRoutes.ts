@@ -27,7 +27,7 @@ class OrderRoutes {
     this.router.post("/", this.orderController.createOrder);
 
     // Update a Order with id
-    this.router.put("/:id", this.orderController.updateOrder);
+    this.router.put("/", this.orderController.updateOrder);
 
     // Delete a Order with id
     this.router.delete("/:id", this.orderController.deleteOrder);

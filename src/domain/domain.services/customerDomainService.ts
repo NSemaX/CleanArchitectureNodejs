@@ -1,11 +1,11 @@
 import { inject, injectable } from "inversify";
-import { CustomerInput } from "../models/customer/customer";
+import {  ICustomer } from "../models/customer/customer";
 import { ICustomerRepository } from "../models/customer/ICustomerRepository";
 import { Types } from "../../infrastructure/utility/DiTypes";
 
 
 export interface ICustomerDomainService {
-  createCustomer: (Customer: CustomerInput) => Promise<any>;
+  createCustomer: (Customer: ICustomer) => Promise<any>;
 }
 
 @injectable()
@@ -14,7 +14,7 @@ export class CustomerDomainService implements ICustomerDomainService {
   private CustomerRepository: ICustomerRepository;
 
 
-  createCustomer = async (Customer: CustomerInput): Promise<any> => {
+  createCustomer = async (Customer: ICustomer): Promise<any> => {
     try { 
       const customer = await this.CustomerRepository.findByEmail(Customer.Email);
       if (customer!=null) {
