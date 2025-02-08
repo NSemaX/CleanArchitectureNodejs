@@ -2,11 +2,11 @@ import { inject, injectable } from "inversify";
 import { Types } from "../../infrastructure/utility/DiTypes";
 import { IOrderRepository } from "../aggregates/orderAggregate/IOrderRepository";
 import { IOrderDetailRepository } from "../aggregates/orderAggregate/IOrderDetailRepository";
-import { OrderOutput } from "../aggregates/orderAggregate/order";
 import { IProductRepository } from "../models/product/IProductRepository";
-import { OrderDetailOutput } from "../aggregates/orderAggregate/orderDetail";
 import Helpers from "../../infrastructure/utility/Helpers";
 import { vars } from "../../infrastructure/config/vars";
+import { IOrder } from "../aggregates/orderAggregate/order";
+import { IOrderDetail } from "../aggregates/orderAggregate/orderDetail";
 
 
 export interface IOrderDomainService {
@@ -28,15 +28,15 @@ export class OrderDomainService implements IOrderDomainService {
     try {
       let result = false;
       const today = new Date();
-      let orderItems: OrderOutput[] = await this.orderRepository.getByCustomerId(Id);
+      let orderItems: IOrder[] = await this.orderRepository.getByCustomerId(Id);
       const orderItemsFiltered = orderItems.filter(
         (item) => today.toDateString() === item.PurchasedDate.toDateString()
       );
 
       let customerProducts: number []=new Array<number>;
-      let allOrderDetails: OrderDetailOutput[]=new Array<OrderDetailOutput>;
+      let allOrderDetails: IOrderDetail[]=new Array<IOrderDetail>;
       for (const orderItem of orderItemsFiltered) {
-        let orderDetails: OrderDetailOutput[] = await this.OrderDetailRepository.getByOrderId(orderItem.ID);
+        let orderDetails: IOrderDetail[] = await this.OrderDetailRepository.getByOrderId(orderItem.ID!);
         if (Array.isArray(orderDetails))
         {
           for (const orderDetailItem of orderDetails) {
@@ -46,7 +46,7 @@ export class OrderDomainService implements IOrderDomainService {
       }
 
       var groupedOrderDetails = Helpers.groupBy(allOrderDetails,"ProductId");
-      let grouppedOrderDetailItems: OrderDetailOutput[]=new Array<OrderDetailOutput>;
+      let grouppedOrderDetailItems: IOrderDetail[]=new Array<IOrderDetail>;
 
 
     for (let [key, value] of Object.entries(groupedOrderDetails)) {

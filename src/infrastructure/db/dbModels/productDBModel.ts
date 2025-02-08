@@ -1,9 +1,9 @@
 import { Model, Sequelize, DataTypes } from "sequelize";
-import { IProduct, ProductInput } from "../../../domain/models/product/product";
+import { IProduct } from "../../../domain/models/product/product";
 
 
 
-class Product extends Model<IProduct,ProductInput> implements IProduct {
+class Product extends Model<IProduct> implements IProduct {
     public ID!: number
     public Name!: string
     public Price!: number

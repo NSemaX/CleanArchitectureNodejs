@@ -1,15 +1,16 @@
 import { inject, injectable } from "inversify";
 import { Types } from "../../infrastructure/utility/DiTypes";
 import { ProductResponse } from "../dtos/product/productResponse";
-import { ProductRequest } from "../dtos/product/productRequest";
 import { IProductRepository } from "../../domain/models/product/IProductRepository";
+import ProductCreateRequest from "../dtos/product/productCreateRequest";
+import { ProductUpdateRequest } from "../dtos/product/productUpdateRequest";
 
 export interface IProductApplicationService {
 
   getProductById: (Id: number) => Promise<ProductResponse>;
   getAllProducts: () => Promise<Array<ProductResponse>>;
-  createProduct: (Product: ProductRequest) => Promise<any>;
-  updateProduct: (Id: number, Product: ProductRequest) => Promise<number>;
+  createProduct: (Product: ProductCreateRequest) => Promise<any>;
+  updateProduct: (Id: number, Product: ProductUpdateRequest) => Promise<number>;
   deleteProduct: (Id: number) => Promise<boolean>;
 }
 
@@ -36,7 +37,7 @@ export class ProductApplicationService implements IProductApplicationService {
     }
   };
 
-  createProduct = async (Product: ProductRequest): Promise<any> => {
+  createProduct = async (Product: ProductCreateRequest): Promise<any> => {
     try {
       return this.ProductRepository.create(Product);
     } catch (ex) {
@@ -44,7 +45,7 @@ export class ProductApplicationService implements IProductApplicationService {
     }
   };
 
-  updateProduct = async (Id: number, Product: ProductRequest): Promise<number> => {
+  updateProduct = async (Id: number, Product: ProductUpdateRequest): Promise<number> => {
     try {
       return this.ProductRepository.update(Id, Product);
     } catch {

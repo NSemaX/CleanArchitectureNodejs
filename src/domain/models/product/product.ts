@@ -1,9 +1,6 @@
-import { Optional } from "sequelize";
-export interface IProduct {
-    ID: number;
+import { IEntity } from "../entity";
+
+export interface IProduct extends IEntity {
     Name: string;
     Price: number;
 }
-
-export interface ProductInput extends Optional<IProduct, 'ID'> {}
-export interface ProductOutput extends Required<IProduct> { } //CreatedAt: Date, UpdatedAt: Date

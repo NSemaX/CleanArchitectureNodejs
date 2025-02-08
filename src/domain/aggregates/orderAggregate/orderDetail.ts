@@ -1,11 +1,8 @@
-import { Optional } from "sequelize";
+import { IEntity } from "../../models/entity";
 
-export interface IOrderDetail {
-    ID: number;
+export interface IOrderDetail extends IEntity {
     OrderId: number;
     ProductId: number;
     Count: number;
 }
 
-export interface OrderDetailInput extends Optional<IOrderDetail, 'ID'> {}
-export interface OrderDetailOutput extends Required<IOrderDetail> {}

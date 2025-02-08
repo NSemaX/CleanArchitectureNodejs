@@ -1,17 +1,17 @@
 import { injectable } from "inversify";
 import "reflect-metadata";
-import  { OrderDetailInput, OrderDetailOutput } from '../../domain/aggregates/orderAggregate/orderDetail'
 import { IOrderDetailRepository } from '../../domain/aggregates/orderAggregate/IOrderDetailRepository';
 import OrderDetail from "../db/dbModels/orderDetailDBModel";
+import { IOrderDetail } from "../../domain/aggregates/orderAggregate/orderDetail";
 
 @injectable()
 export class OrderDetailRepository implements IOrderDetailRepository {
 
-    getAll = async (): Promise<Array<OrderDetailOutput>> => {
+    getAll = async (): Promise<Array<IOrderDetail>> => {
         return OrderDetail.findAll()
     }
 
-    getById = async (id: number): Promise<OrderDetailOutput> => {
+    getById = async (id: number): Promise<IOrderDetail> => {
         const item = await OrderDetail.findByPk(id)
 
         if (!item) {
@@ -21,7 +21,7 @@ export class OrderDetailRepository implements IOrderDetailRepository {
         return item
     }
 
-    getByOrderId = async (key: number): Promise<Array<OrderDetailOutput>> => {
+    getByOrderId = async (key: number): Promise<Array<IOrderDetail>> => {
         const items = await OrderDetail.findAll({
             where: {
                 OrderId: key,
@@ -35,13 +35,13 @@ export class OrderDetailRepository implements IOrderDetailRepository {
         return items
     }
 
-    create = async (payload: OrderDetailInput): Promise<any> => {
+    create = async (payload: IOrderDetail): Promise<any> => {
         const item = await OrderDetail.create(payload)
         return item.ID
     }
 
 
-    update = async (ID: number, payload: Partial<OrderDetailInput>): Promise<number> => {
+    update = async (ID: number, payload: Partial<IOrderDetail>): Promise<number> => {
         const item = await OrderDetail.findByPk(ID)
 
         if (!item) {

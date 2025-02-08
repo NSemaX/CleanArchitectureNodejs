@@ -1,18 +1,18 @@
 import { injectable } from "inversify";
 import "reflect-metadata";
-import  { ProductInput, ProductOutput } from '../../domain/models/product/product'
 import { IProductRepository } from '../../domain/models/product/IProductRepository';
 import Product from "../db/dbModels/productDBModel";
+import { IProduct } from "../../domain/models/product/product";
 
 
 @injectable()
 export class ProductRepository implements IProductRepository {
 
-    getAll = async (): Promise<Array<ProductOutput>> => {
+    getAll = async (): Promise<Array<IProduct>> => {
         return Product.findAll()
     }
 
-    getById = async (id: number): Promise<ProductOutput> => {
+    getById = async (id: number): Promise<IProduct> => {
         const item = await Product.findByPk(id)
 
         if (!item) {
@@ -22,13 +22,13 @@ export class ProductRepository implements IProductRepository {
         return item
     }
 
-    create = async (payload: ProductInput): Promise<any> => {
+    create = async (payload: IProduct): Promise<any> => {
         const item = await Product.create(payload)
         return item.ID
     }
 
 
-    update = async (ID: number, payload: Partial<ProductInput>): Promise<number> => {
+    update = async (ID: number, payload: Partial<IProduct>): Promise<number> => {
         const item = await Product.findByPk(ID)
 
         if (!item) {

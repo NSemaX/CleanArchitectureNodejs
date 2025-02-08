@@ -1,3 +1,4 @@
+import { IOrder } from "../../../domain/aggregates/orderAggregate/order";
 import { CustomerResponse } from "../customer/customerResponse";
 import { ProductResponse } from "../product/productResponse";
 
@@ -26,3 +27,5 @@ export class OrderResponse {
     UpdatedDate: Date;
   }
   export default OrderResponse
+
+  export interface OrderItemResponse extends IOrder{}

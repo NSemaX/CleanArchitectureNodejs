@@ -1,9 +1,9 @@
 import { Model, Sequelize, DataTypes, Optional } from "sequelize";
-import { IOrderDetail, OrderDetailInput } from "../../../domain/aggregates/orderAggregate/orderDetail";
+import { IOrderDetail } from "../../../domain/aggregates/orderAggregate/orderDetail";
 
 
 
-class OrderDetail extends Model<IOrderDetail,OrderDetailInput> implements IOrderDetail {
+class OrderDetail extends Model<IOrderDetail> implements IOrderDetail {
     public ID: number
     public OrderId: number
     public ProductId: number

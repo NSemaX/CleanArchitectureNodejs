@@ -2,8 +2,9 @@ import { Request, Response } from "express";
 import { inject, injectable } from "inversify";
 import { StatusCode } from "../../infrastructure/utility/statusCodes";
 import { Types } from "../../infrastructure/utility/DiTypes";
-import { ProductRequest } from "../../application/dtos/product/productRequest";
 import { IProductApplicationService } from "../../application/application.services/productApplicationService";
+import ProductCreateRequest from "../../application/dtos/product/productCreateRequest";
+import { ProductUpdateRequest } from "../../application/dtos/product/productUpdateRequest";
 
 
 export interface IProductController {
@@ -49,7 +50,7 @@ export class ProductController implements IProductController {
   public createProduct = async (req: Request, res: Response) => {
     try {
       const { Name, Price } = req.body;
-      const productRequest: ProductRequest = {Name,Price}; 
+      const productRequest: ProductCreateRequest = {Name,Price}; 
       const product = await this.ProductApplicationService.createProduct(productRequest);
       res.status(StatusCode.SUCCESS).send();
     } catch (ex) {
@@ -62,7 +63,7 @@ export class ProductController implements IProductController {
   public updateProduct = async (req: Request, res: Response) => {
     try {
       const { ID, Name, Price } = req.body;
-      const productRequest: ProductRequest = {ID, Name,Price}; 
+      const productRequest: ProductUpdateRequest = {ID, Name,Price}; 
       const id=productRequest.ID!;
       const updatedProductCount = await this.ProductApplicationService.updateProduct(id, productRequest);
       res.status(StatusCode.SUCCESS).send();

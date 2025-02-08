@@ -1,11 +1,12 @@
-import { OrderDetailInput, OrderDetailOutput } from "./orderDetail";
+import { IOrderDetail } from "./orderDetail";
+
 
 
 export interface IOrderDetailRepository {
-    getAll: () => Promise<Array<OrderDetailOutput>>;
-    getById: (id: number) => Promise<OrderDetailOutput>;
-    getByOrderId: (id: number) => Promise<Array<OrderDetailOutput>>;
-    create: (OrderDetail: OrderDetailInput) => Promise<any>;
-    update: (id: number, OrderDetail: Partial<OrderDetailInput>) => Promise<number>;
+    getAll: () => Promise<Array<IOrderDetail>>;
+    getById: (id: number) => Promise<IOrderDetail>;
+    getByOrderId: (id: number) => Promise<Array<IOrderDetail>>;
+    create: (OrderDetail: IOrderDetail) => Promise<any>;
+    update: (id: number, OrderDetail: Partial<IOrderDetail>) => Promise<number>;
     delete: (id: any) => Promise<boolean>;
 }
