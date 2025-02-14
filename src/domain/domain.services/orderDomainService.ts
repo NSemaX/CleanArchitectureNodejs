@@ -10,7 +10,7 @@ import { IOrderDetail } from "../aggregates/orderAggregate/orderDetail";
 
 
 export interface IOrderDomainService {
-  isOrderReachedtheMaxProductCountInADay: (Id: number) => Promise<boolean>;
+  isOrderReachedtheMaxProductCountInADay: (Id: number, OrderDetails: IOrderDetail[]) => Promise<boolean>;
 }
 
 @injectable()
@@ -24,7 +24,7 @@ export class OrderDomainService implements IOrderDomainService {
   @inject(Types.PRODUCT_REPOSITORY)
   private ProductRepository: IProductRepository;
 
-  isOrderReachedtheMaxProductCountInADay = async (Id: number): Promise<boolean> => {
+  isOrderReachedtheMaxProductCountInADay = async (Id: number, OrderDetails: IOrderDetail[]): Promise<boolean> => {
     try {
       let result = false;
       const today = new Date();
@@ -33,39 +33,39 @@ export class OrderDomainService implements IOrderDomainService {
         (item) => today.toDateString() === item.PurchasedDate.toDateString()
       );
 
-      let customerProducts: number []=new Array<number>;
-      let allOrderDetails: IOrderDetail[]=new Array<IOrderDetail>;
+
+      let allOrderDetails: IOrderDetail[] = new Array<IOrderDetail>;
       for (const orderItem of orderItemsFiltered) {
         let orderDetails: IOrderDetail[] = await this.OrderDetailRepository.getByOrderId(orderItem.ID!);
-        if (Array.isArray(orderDetails))
-        {
-          for (const orderDetailItem of orderDetails) {
-            allOrderDetails.push(orderDetailItem);
-          }         
+        if (Array.isArray(orderDetails)) {
+          allOrderDetails.concat(orderDetails);
         }
       }
 
-      var groupedOrderDetails = Helpers.groupBy(allOrderDetails,"ProductId");
-      let grouppedOrderDetailItems: IOrderDetail[]=new Array<IOrderDetail>;
+      var groupedOrderDetailsDictionary = Helpers.groupBy(allOrderDetails, "ProductId");
+      let grouppedOrderDetailItems: IOrderDetail[] = new Array<IOrderDetail>;
 
+      let customerProductTotalCountsinADay: number[] = new Array<number>(); //just for logging purpose
 
-    for (let [key, value] of Object.entries(groupedOrderDetails)) {
-      console.log(key + ": " + value); 
-      grouppedOrderDetailItems =value;
-      let grouppedProductCount:number=0;
-      grouppedOrderDetailItems.forEach((orderDetail) => {              
-        grouppedProductCount+=orderDetail.Count;             
-          });
-          customerProducts.push(grouppedProductCount);
+      for (const orderDetailItem of OrderDetails) {
+        for (let [key, value] of Object.entries(groupedOrderDetailsDictionary)) {
+          console.log(key + ": " + value);
+          if (orderDetailItem.ProductId.toString() === key) {
+            grouppedOrderDetailItems = value;
+            let grouppedProductCount: number = 0;
+            grouppedOrderDetailItems.forEach((orderDetail) => {
+              grouppedProductCount += orderDetail.Count;
+            });
+
+            if (grouppedProductCount + orderDetailItem.Count >= vars.maxOrderableProductCountInADay)
+              result = true;
+            customerProductTotalCountsinADay.push(grouppedProductCount);
+          }
+        }
+
       }
-    
-      console.log(customerProducts);
-
-      let greater = 0;
-      const maxOrderableProductCountInADay = vars.maxOrderableProductCountInADay;
-      customerProducts.forEach((num: number) => { if (num > maxOrderableProductCountInADay) greater++; });
-      if (greater > 0)
-        result = true;
+      console.log(customerProductTotalCountsinADay);
+      
       return result;
     } catch (ex) {
       throw new Error("Unable to create order");

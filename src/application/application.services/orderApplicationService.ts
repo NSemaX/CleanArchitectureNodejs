@@ -79,7 +79,12 @@ export class OrderApplicationService implements IOrderApplicationService {
 
   createOrder = async (orderCreateRequest: OrderCreateRequest): Promise<any> => {
     try {
-      let isReachedMaxProductInADay = await this.orderDomainService.isOrderReachedtheMaxProductCountInADay(orderCreateRequest.Order.CustomerId);
+      let  OrderDetails: IOrderDetail[] =new Array<IOrderDetail>;
+      for (const orderDetailItem of orderCreateRequest.OrderDetails) {
+        let OrderDetailItem: IOrderDetail = { OrderId: 0, Count:orderDetailItem.Count, ProductId:orderDetailItem.ProductId };
+        OrderDetails.push(OrderDetailItem);
+      }
+      let isReachedMaxProductInADay = await this.orderDomainService.isOrderReachedtheMaxProductCountInADay(orderCreateRequest.Order.CustomerId,OrderDetails);
 
       if (!isReachedMaxProductInADay) {
         let TotalAmount = 0;
