@@ -21,9 +21,6 @@ export class OrderDomainService implements IOrderDomainService {
   @inject(Types.ORDER_DETAIL_REPOSITORY)
   private OrderDetailRepository: IOrderDetailRepository;
 
-  @inject(Types.PRODUCT_REPOSITORY)
-  private ProductRepository: IProductRepository;
-
   isOrderReachedtheMaxProductCountInADay = async (Id: number, OrderDetails: IOrderDetail[]): Promise<boolean> => {
     try {
       let result = false;
@@ -57,7 +54,7 @@ export class OrderDomainService implements IOrderDomainService {
               grouppedProductCount += orderDetail.Count;
             });
 
-            if (grouppedProductCount + orderDetailItem.Count >= vars.maxOrderableProductCountInADay)
+            if (grouppedProductCount + orderDetailItem.Count > vars.maxOrderableProductCountInADay)
               result = true;
             customerProductTotalCountsinADay.push(grouppedProductCount);
           }
