@@ -122,8 +122,8 @@ export class OrderApplicationService implements IOrderApplicationService {
   deleteOrder = async (Id: number,): Promise<boolean> => {
     try {
       let orderDetails: IOrderDetail[] = await this.OrderDetailRepository.getByOrderId(Id);
-      for (const orderItem of orderDetails) {
-        let deletedOrderDetailItemId = await this.OrderDetailRepository.delete(orderItem.ID);
+      for (const orderDetailItem of orderDetails) {
+        let deletedOrderDetailItemId = await this.OrderDetailRepository.delete(orderDetailItem.ID);
       }
       let deletedOrderItemId = this.orderRepository.delete(Id);
       return deletedOrderItemId
