@@ -11,8 +11,8 @@ import { ICustomer } from "../../domain/models/customer/customer";
 
 export interface ICustomerApplicationService {
 
-  getCustomerById: (Id: number) => Promise<CustomerResponse>;
   getAllCustomers: () => Promise<Array<CustomerResponse>>;
+  getCustomerById: (Id: number) => Promise<CustomerResponse>;
   createCustomer: (Customer: CustomerCreateRequest) => Promise<any>;
   updateCustomer: (Id: number, Customer: CustomerUpdateRequest) => Promise<number>;
   deleteCustomer: (Id: number) => Promise<boolean>;

@@ -7,8 +7,8 @@ import { ProductUpdateRequest } from "../dtos/product/productUpdateRequest";
 
 export interface IProductApplicationService {
 
-  getProductById: (Id: number) => Promise<ProductResponse>;
   getAllProducts: () => Promise<Array<ProductResponse>>;
+  getProductById: (Id: number) => Promise<ProductResponse>;
   createProduct: (Product: ProductCreateRequest) => Promise<any>;
   updateProduct: (Id: number, Product: ProductUpdateRequest) => Promise<number>;
   deleteProduct: (Id: number) => Promise<boolean>;
