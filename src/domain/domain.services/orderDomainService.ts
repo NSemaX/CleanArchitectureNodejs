@@ -35,7 +35,9 @@ export class OrderDomainService implements IOrderDomainService {
       for (const orderItem of orderItemsFiltered) {
         let orderDetails: IOrderDetail[] = await this.OrderDetailRepository.getByOrderId(orderItem.ID!);
         if (Array.isArray(orderDetails)) {
-          allOrderDetails.concat(orderDetails);
+          orderDetails.forEach(function (value) {
+            allOrderDetails.push(value);
+        });
         }
       }
 
