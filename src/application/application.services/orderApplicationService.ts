@@ -140,7 +140,8 @@ export class OrderApplicationService implements IOrderApplicationService {
 
     OrderDTOItem.ID = order.ID!;
     OrderDTOItem.Customer = await this.CustomerRepository.getById(order.CustomerId);
-    OrderDTOItem.Status = order.Status
+    OrderDTOItem.Status = order.Status;
+    OrderDTOItem.TotalAmount=order.TotalAmount;
     OrderDTOItem.PurchasedDate = order.PurchasedDate;
 
     let OrderDetailDTOItems: Array<OrderDetailResponseDTO> = new Array<OrderDetailResponseDTO>();
